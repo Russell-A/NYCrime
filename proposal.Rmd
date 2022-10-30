@@ -3,6 +3,8 @@
 ## Research topic
 
 ## Data availability
+In order to find appropriate answers for our research questions, we choose "NYPD Complaint Data Current(Year To Date)" dataset from NYCOpenData website as our main data source to analyze. 
+
 
 The Socrata Open Data API (SODA) provides programmatic access to this dataset including the ability to filter, query, and aggregate data.
 
