@@ -2,15 +2,9 @@
 
 ## Research topic
 
-We chose "NYC crimes" as our topic, because, as a resident of New York
-City, we would like to utilize the result of our analysis to avoid
-dangerous situation as much as possible. Although crime data for other
-cities in the United State might be accessible, we rather focus on New
-York City in order not to go off the rails from the purpose.
+We chose "NYC crimes" as our topic, because, as a resident of New York City, we would like to utilize the result of our analysis to avoid dangerous situation as much as possible. Although crime data for other cities in the United State might be accessible, we rather focus on New York City in order not to go off the rails from the purpose.
 
-In this project, we clarify the characteristics of crimes and victims at
-a single point (cross-sectional) as well as time series trends.
-Specifically, we answer these questions below:
+In this project, we clarify the characteristics of crimes and victims at a single point (cross-sectional) as well as time series trends. Specifically, we answer these questions below:
 
 -   what type of crimes occur the most/least;
 
