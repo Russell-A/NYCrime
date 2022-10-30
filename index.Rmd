@@ -7,3 +7,17 @@ site: bookdown::bookdown_site
 
 # Introduction
 
+New York City, where we are living and studying, is one of the biggest and busiest cities in the world. The population is over 8 million as of 2021, which is largest of all cities in the United States, according to [United States Census Bureau](https://www.census.gov/popclock/). However, the Big Apple is not only exciting but also infamous for the high crime rate, especially the hike after the COVID-19 pandemic. Actually, we can see horrible news on a crime almost everyday (it seems to be a hundred times more than my home country...). Our motivation for choosing this topic, NYC crimes, is here: in order to live in the city at ease, we are very curious about the crime data to understand what occurs.
+
+Through this project, we would like to clarify and answer questions below:
+
+-   what type of crimes occur the most/least;
+
+-   where crimes occur the most/least;
+
+-   what type of people are likely to be victims;
+
+-   do the characteristics above differ depending on the time the incident occurs (morning, daytime, night...);
+
+-   is there any trends or changes in terms of time series.
+
