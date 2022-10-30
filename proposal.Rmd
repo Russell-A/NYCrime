@@ -3,7 +3,7 @@
 ## Research topic
 
 ## Data availability
-In order to find appropriate answers for our research questions, we choose "NYPD Complaint Data Current(Year To Date)" dataset from NYCOpenData website as our main data source to analyze. 
+In order to find appropriate answers for our research questions, we choose "NYPD Complaint Data Current(Year To Date)" dataset from NYCOpenData website as our main data source to analyze.This dataset contains all valid felony, misdemeanor and violation crimes reported to the New York City Police Department(NYPD) starting consecutively from 1972 to 2022. 
 
 
 The Socrata Open Data API (SODA) provides programmatic access to this dataset including the ability to filter, query, and aggregate data.
