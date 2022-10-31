@@ -23,7 +23,7 @@
 <meta name="author" content="Shumin, Xinhao, and Yuta" />
 
 
-<meta name="date" content="2022-10-29" />
+<meta name="date" content="2022-10-31" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -110,9 +110,35 @@
 <h1><span class="header-section-number">Chapter 2</span> Proposal<a href="proposal.html#proposal" class="anchor-section" aria-label="Anchor link to header"></a></h1>
 <div id="research-topic" class="section level2 hasAnchor" number="2.1">
 <h2><span class="header-section-number">2.1</span> Research topic<a href="proposal.html#research-topic" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>We chose “NYC crimes” as our topic, because, as a resident of New York City, we would like to utilize the result of our analysis to avoid dangerous situation as much as possible. Although crime data for other cities in the United State might be accessible, we rather focus on New York City in order not to go off the rails from the purpose.</p>
+<p>In this project, we clarify the characteristics of crimes and victims at a single point (cross-sectional) as well as time series trends. Specifically, we answer these questions below:</p>
+<ul>
+<li><p>what type of crimes occur the most/least;</p></li>
+<li><p>where crimes occur the most/least;</p></li>
+<li><p>what type of people are likely to be victims;</p></li>
+<li><p>do the characteristics above differ depending on the time the incident occurs;</p></li>
+<li><p>is there any trends or changes in terms of time series.</p></li>
+</ul>
+<p>Answering these questions will help us be safe, knowing how I am likely to be at risk and avoiding dangerous places and times.</p>
 </div>
 <div id="data-availability" class="section level2 hasAnchor" number="2.2">
 <h2><span class="header-section-number">2.2</span> Data availability<a href="proposal.html#data-availability" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>In order to find appropriate answers for our research questions, we choose “NYPD Complaint Data Current(Year To Date)” dataset from NYC Open Data website as our main data source to analyze. The URL of this dataset is <a href="https://data.cityofnewyork.us/Public-Safety/NYPD-Complaint-Data-Current-Year-To-Date-/5uac-w243" class="uri">https://data.cityofnewyork.us/Public-Safety/NYPD-Complaint-Data-Current-Year-To-Date-/5uac-w243</a> . This dataset contains all valid felony, misdemeanor and violation crimes reported to the New York City Police Department(NYPD), which demonstrates the reliability and authority of the data. The dataset is in CSV file format and it is updated by NYPD quarterly. So far, this dataset collects consecutive records starting from 1972 to 2022, which allow us to investigate changes of total number of crime reports with time and proportion of different types of crimes in each year.</p>
+<p>One crucial reason why we select this data source is that NYPD provides numerous accurate reports with detailed and various descriptions. The raw dataset contains approximately 400,000 crime records with 36 variable categories in total. There are many descriptive variables such as exact date of occurrence for the reported event, level of offense including felony, misdemeanor and violation, description of offense, suspect’s age and race group, etc. Supported by these variables of each observation, we can select and analyze data and illustrative information related to our research questions. For example, we need to filter out level of offense as well as description of offense categories in answering question “what type of crimes occur the most/least in NYC”.</p>
+<p>Nevertheless, there are some unimportant variables for our research questions. For example, the exact time of occurrence for the reported event time within a particular day, the name of the patrol borough in which the crime incident occurred and precise physical coordinates of location where reported event occurred. Further, it contains many null/NA values for many observations and unknown values for some observations. For instance, the age and race of suspect could be “unknown” in the dataset. Therefore, we need to remove unnecessary variables and modify the null values in data cleaning process.</p>
+<p>The Socrata Open Data API (SODA) provides programmatic access to this dataset including the ability to filter, query, and aggregate data.</p>
+<p>As the dataset is available on NYC Open Data, we can register an account and create an app_token.to accesss the data with Socrata Open Data API.</p>
+<p>Install the required package with:
+install.packages(“RSocrata”)
+Download Data with:
+library(“RSocrata”)
+df &lt;- read.socrata(
+“<a href="https://data.cityofnewyork.us/resource/5uac-w243.json" class="uri">https://data.cityofnewyork.us/resource/5uac-w243.json</a>”,
+app_token = “vIJ4xFjA2E86HXCxu41t3VDIy”,
+email = “****”,
+password = “****”
+)
+For safety reason, the email and password is concealed.</p>
 
 </div>
 </div>
@@ -153,7 +179,7 @@ gitbook.start({
 "size": 2
 },
 "edit": {
-"link": "https://github.com/YOUR GITHUB USERNAME/YOUR REPO NAME/edit/main/proposal.Rmd",
+"link": "https://github.com/Russell-A/NYCrime/edit/main/proposal.Rmd",
 "text": "Edit"
 },
 "history": {
@@ -161,7 +187,7 @@ gitbook.start({
 "text": null
 },
 "view": {
-"link": "https://github.com/YOUR GITHUB USERNAME/YOUR REPO NAME/blob/main/proposal.Rmd",
+"link": "https://github.com/Russell-A/NYCrime/blob/main/proposal.Rmd",
 "text": null
 },
 "download": null,
