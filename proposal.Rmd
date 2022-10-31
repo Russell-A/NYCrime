@@ -25,21 +25,21 @@ One crucial reason why we select this data source is that NYPD provides numerous
 
 Nevertheless, there are some unimportant variables for our research questions. For example, the exact time of occurrence for the reported event time within a particular day, the name of the patrol borough in which the crime incident occurred and precise physical coordinates of location where reported event occurred. Further, it contains many null/NA values for many observations and unknown values for some observations. For instance, the age and race of suspect could be “unknown” in the dataset. Therefore, we need to remove unnecessary variables and modify the null values in data cleaning process.
 
-The Socrata Open Data API (SODA) provides programmatic access to this dataset including the ability to filter, query, and aggregate data.
+The Socrata Open Data API (SODA) provides programmatic access to this data set including the ability to filter, query, and aggregate data. To download the data in R, we can register an account on NYC Open Data to create an app_token and access the data with Socrata Open Data API, which is a package called RSocrata in R. Once we download the dataset, we can save it locally and load it every time we analyze the data.
 
-As the dataset is available on NYC Open Data, we can register an account and create an app_token.to accesss the data with Socrata Open Data API.
-
-Install the required package with:
-install.packages("RSocrata")
-Download Data with:
+```{r download data, include = FALSE}
+# install.packages("RSocrata")
+# Download Data with:
 library("RSocrata")
-df <- read.socrata(
-  "https://data.cityofnewyork.us/resource/5uac-w243.json",
-  app_token = "vIJ4xFjA2E86HXCxu41t3VDIy",
-  email     = "****",
-  password  = "****"
-)
-For safety reason, the email and password is concealed.
+# df <- read.socrata(
+  # "https://data.cityofnewyork.us/resource/5uac-w243.json",
+  # app_token = "vIJ4xFjA2E86HXCxu41t3VDIy",
+  # email     = "****",
+  # password  = "****"
+  #)
+# For safety reason, the email and password are concealed.
+```
+
 
 
 ```{r save data}
