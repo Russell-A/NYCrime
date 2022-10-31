@@ -126,19 +126,7 @@
 <p>In order to find appropriate answers for our research questions, we choose “NYPD Complaint Data Current(Year To Date)” dataset from NYC Open Data website as our main data source to analyze. The URL of this dataset is <a href="https://data.cityofnewyork.us/Public-Safety/NYPD-Complaint-Data-Current-Year-To-Date-/5uac-w243" class="uri">https://data.cityofnewyork.us/Public-Safety/NYPD-Complaint-Data-Current-Year-To-Date-/5uac-w243</a> . This dataset contains all valid felony, misdemeanor and violation crimes reported to the New York City Police Department(NYPD), which demonstrates the reliability and authority of the data. The dataset is in CSV file format and it is updated by NYPD quarterly. So far, this dataset collects consecutive records starting from 1972 to 2022, which allow us to investigate changes of total number of crime reports with time and proportion of different types of crimes in each year.</p>
 <p>One crucial reason why we select this data source is that NYPD provides numerous accurate reports with detailed and various descriptions. The raw dataset contains approximately 400,000 crime records with 36 variable categories in total. There are many descriptive variables such as exact date of occurrence for the reported event, level of offense including felony, misdemeanor and violation, description of offense, suspect’s age and race group, etc. Supported by these variables of each observation, we can select and analyze data and illustrative information related to our research questions. For example, we need to filter out level of offense as well as description of offense categories in answering question “what type of crimes occur the most/least in NYC”.</p>
 <p>Nevertheless, there are some unimportant variables for our research questions. For example, the exact time of occurrence for the reported event time within a particular day, the name of the patrol borough in which the crime incident occurred and precise physical coordinates of location where reported event occurred. Further, it contains many null/NA values for many observations and unknown values for some observations. For instance, the age and race of suspect could be “unknown” in the dataset. Therefore, we need to remove unnecessary variables and modify the null values in data cleaning process.</p>
-<p>The Socrata Open Data API (SODA) provides programmatic access to this dataset including the ability to filter, query, and aggregate data.</p>
-<p>As the dataset is available on NYC Open Data, we can register an account and create an app_token.to accesss the data with Socrata Open Data API.</p>
-<p>Install the required package with:
-install.packages(“RSocrata”)
-Download Data with:
-library(“RSocrata”)
-df &lt;- read.socrata(
-“<a href="https://data.cityofnewyork.us/resource/5uac-w243.json" class="uri">https://data.cityofnewyork.us/resource/5uac-w243.json</a>”,
-app_token = “vIJ4xFjA2E86HXCxu41t3VDIy”,
-email = “****”,
-password = “****”
-)
-For safety reason, the email and password is concealed.</p>
+<p>The Socrata Open Data API (SODA) provides programmatic access to this data set including the ability to filter, query, and aggregate data. To download the data in R, we can register an account on NYC Open Data to create an app_token and access the data with Socrata Open Data API, which is a package called RSocrata in R. Once we download the dataset, we can save it locally and load it every time we analyze the data.</p>
 
 </div>
 </div>
