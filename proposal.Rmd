@@ -16,6 +16,7 @@ In this project, we clarify the characteristics of crimes and victims at a singl
 
 -   is there any trends or changes in terms of time series.
 
+Answering these questions will help us be safe, knowing how I am likely to be at risk and avoiding dangerous places and times. 
 
 ## Data availability
 
