@@ -22,25 +22,60 @@ df$latitude <- as.numeric(df$latitude)
 df$longitude <- as.numeric(df$longitude)
 
 ## drop column
-df = subset(df, select = -c(lat_lon.latitude, lat_lon.longitude, geocoded_column.coordinates))
+df = df[,!(names(df) %in% c("lat_lon.latitude", "lat_lon.longitude", "geocoded_column.coordinates"))]
 
+## drop row
+df <- subset(df, cmplnt_fr_dt >= as.Date("2000-01-01"))
+df <- subset(df, (susp_age_group %in% c("UNKNOWN","(null)","<18","18-24","25-44","45-64","65+")))
+df <- subset(df, (vic_age_group %in% c("UNKNOWN","(null)","<18","18-24","25-44","45-64","65+")))
 
 ## factorize column
+df$addr_pct_cd <- as.factor(df$addr_pct_cd)
 df$boro_nm <- as.factor(df$boro_nm)
 df$crm_atpt_cptd_cd <- as.factor(df$crm_atpt_cptd_cd)
-
-
-str(df)
+df$hadevelopt <- as.factor(df$hadevelopt)
+df$jurisdiction_code <- as.factor(df$jurisdiction_code)
+df$juris_desc <- as.factor(df$juris_desc)
+df$ky_cd <- as.factor(df$ky_cd)
+df$law_cat_cd <- factor(df$law_cat_cd, levels = c( "VIOLATION", "MISDEMEANOR", "FELONY"))
+df$loc_of_occur_desc <- as.factor(df$loc_of_occur_desc)
+df$parks_nm <- as.factor(df$parks_nm)
+df$patrol_boro <- as.factor(df$patrol_boro)
+df$pd_cd <- as.factor(df$pd_cd)
+df$susp_age_group <- factor(df$susp_age_group, levels = c("UNKNOWN","(null)","<18","18-24","25-44","45-64","65+"))
+df$susp_race <- as.factor(df$susp_race)
+df$susp_sex <- as.factor(df$susp_sex)
+df$vic_age_group <- factor(df$vic_age_group, levels = c("UNKNOWN","(null)","<18","18-24","25-44","45-64","65+"))
+df$vic_race <- as.factor(df$vic_race)
+df$vic_sex <- as.factor(df$vic_sex)
+df$housing_psa <- as.factor(df$housing_psa)
+df$transit_district <- as.factor(df$transit_district)
+df$geocoded_column.type <- as.factor(df$geocoded_column.type)
 ```
 
 The format of dataset is described in section 2.3. In this section, we want to do some cleaning and transformation to the raw dataset to make it tidy.
 
 1. We transform the type of columns to match it's description. For example, we transform the type of *ADDR_PCT_CD* to numeric, as it describes the precinct in which the incident occurred. Also, we transform the type of *CMPLNT_FR_DT* into date, as it describes exact date of occurrence for the reported event. 
 
-2. We drop the duplicated columns. For example, *Lat_Lon.Latitude* is exactly the same as *Lat_Lon.Latitude*, and *Lat_Lon.Longitude* is identical to *Longitude*. Moreover, *New Georeferenced Column* is just the combination of *Latitude* and *Longitude*. Therefore, we drop 
+2. We drop the columns carrying the same information. For example, *Lat_Lon.Latitude* is exactly the same as *Lat_Lon.Latitude*, and *Lat_Lon.Longitude* is identical to *Longitude*. Moreover, *New Georeferenced Column* is just the combination of *Latitude* and *Longitude*. Therefore, we drop 
 *Lat_Lon* and *New Georeferenced Column* in our dataset.
 
-3. We factorize some variables.
+3. we drop the unreasonable rows. For example, there are crimes starting at year 1011, which we believe is a mistake. In addition, in the suspect's and victim's ages, there are negative values. So we drop the rows with such mistakes.
+
+4. We factorize some variables. For example, *ADDR_PCT_CD* describes the precinct in which the incident occurred, so instead of integer, it should be factor. Moreover, some factors are ordinal, like *LAW_CAT_CD*, it describes the level of offense: felony, misdemeanor, violation, and *SUSP_AGE_GROUP*,	which is the suspect’s age group.
+
+After cleaning and transforming, the description and the class of each column is shown in the table below:
+```{r cleaning and transformation1}
+Colname <- c('CMPLNT_NUM', 'ADDR_PCT_CD', 'BORO_NM', 'CMPLNT_FR_DT', 'CMPLNT_FR_TM', 'CMPLNT_TO_DT', 'CMPLNT_TO_TM', 'CRM_ATPT_CPTD_CD', 'HADEVELOPT', 'HOUSING_PSA', 'JURISDICTION_CODE', 'JURIS_DESC', 'KY_CD', 'LAW_CAT_CD', 'LOC_OF_OCCUR_DESC', 'OFNS_DESC', 'PARKS_NM', 'PATROL_BORO', 'PD_CD', 'PD_DESC', 'PREM_TYP_DESC', 'RPT_DT', 'STATION_NAME', 'SUSP_AGE_GROUP', 'SUSP_RACE', 'SUSP_SEX', 'TRANSIT_DISTRICT', 'VIC_AGE_GROUP', 'VIC_RACE', 'VIC_SEX', 'X_COORD_CD', 'Y_COORD_CD', 'Latitude', 'Longitude', 'Lat_Lon', 'New Georeferenced Column')
+Description = c('Randomly generated persistent ID for each complaint', 'The precinct in which the incident occurred', 'The name of the borough in which the incident occurred', 'Exact date of occurrence for the reported event (or starting date of occurrence, if CMPLNT_TO_DT exists)', 'Exact time of occurrence for the reported event (or starting time of occurrence, if CMPLNT_TO_TM exists)', 'Ending date of occurrence for the reported event, if exact time of occurrence is unknown', 'Ending time of occurrence for the reported event, if exact time of occurrence is unknown', 'Indicator of whether crime was successfully completed or attempted, but failed or was interrupted prematurely', 'Name of NYCHA housing development of occurrence, if applicable', 'Development Level Code', 'Jurisdiction responsible for incident. Either internal, like Police(0), Transit(1), and Housing(2); or external(3), like Correction, Port Authority, etc.', 'Description of the jurisdiction code', 'Three digit offense classification code', 'Level of offense: felony, misdemeanor, violation', 'Specific location of occurrence in or around the premises; inside, opposite of, front of, rear of', 'Description of offense corresponding with key code', 'Name of NYC park, playground or greenspace of occurrence, if applicable (state parks are not included)', 'The name of the patrol borough in which the incident occurred', 'Three digit internal classification code (more granular than Key Code)', 'Description of internal classification corresponding with PD code (more granular than Offense Description)', 'Specific description of premises; grocery store, residence, street, etc.', 'Date event was reported to police', 'Transit station name', 'Suspect’s Age Group', 'Suspect’s Race Description', 'Suspect’s Sex Description', 'Transit district in which the offense occurred.', 'Victim’s Age Group', 'Victim’s Race Description', 'Victim’s Sex Description', 'X-coordinate for New York State Plane Coordinate System, Long Island Zone, NAD 83, units feet (FIPS 3104)', 'Y-coordinate for New York State Plane Coordinate System, Long Island Zone, NAD 83, units feet (FIPS 3104)', 'Midblock Latitude coordinate for Global Coordinate System, WGS 1984, decimal degrees (EPSG 4326)', 'Midblock Longitude coordinate for Global Coordinate System, WGS 1984, decimal degrees (EPSG 4326)', '', '')
+t <- data.frame(Colname, Description)
+t1 <- as.data.frame(list(Colname = toupper(colnames(df)), Class = sapply(df, class)), row.names = NULL)
+t$colname <- toupper(t$Colname)
+t2<-merge(t1, t) %>% select(1,3,2) %>%add_row(Colname = "Geocoded_Column.type", Description = 'Type of the geographical location', Class = "factor")
+knitr::kable(t2)
+```
+
+
 
 ## Missing value analysis
 

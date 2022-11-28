@@ -59,7 +59,8 @@ types = c('Plain Text', 'Number', 'Plain Text', 'Date & Time', 'Plain Text', 'Da
 m_format <- data.frame(colname, description, types)
 knitr::kable(m_format)
 
-apply(is.na.data.frame(df), 2, sum)
+
+
 
 
 ```

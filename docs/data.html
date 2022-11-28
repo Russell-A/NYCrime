@@ -115,49 +115,196 @@
 </div>
 <div id="cleaning-transformation" class="section level2 hasAnchor" number="3.2">
 <h2><span class="header-section-number">3.2</span> Cleaning / transformation<a href="data.html#cleaning-transformation" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<pre><code>## &#39;data.frame&#39;:    396978 obs. of  35 variables:
-##  $ cmplnt_num          : chr  &quot;247350382&quot; &quot;248380989&quot; &quot;250905436&quot; &quot;243724728&quot; ...
-##  $ addr_pct_cd         : num  73 114 120 109 102 70 43 79 110 73 ...
-##  $ boro_nm             : Factor w/ 6 levels &quot;(null)&quot;,&quot;BRONX&quot;,..: 3 5 6 5 5 3 2 3 5 3 ...
-##  $ cmplnt_fr_dt        : Date, format: &quot;1011-05-18&quot; &quot;1011-07-06&quot; &quot;1011-09-10&quot; &quot;1022-04-11&quot; ...
-##  $ cmplnt_fr_tm        : chr  &quot;16:47:00&quot; &quot;13:39:00&quot; &quot;17:00:00&quot; &quot;19:00:00&quot; ...
-##  $ cmplnt_to_dt        : Date, format: &quot;2022-06-29&quot; &quot;2022-07-08&quot; &quot;2022-09-10&quot; &quot;2022-04-14&quot; ...
-##  $ cmplnt_to_tm        : chr  &quot;16:51:00&quot; &quot;22:30:00&quot; &quot;17:21:00&quot; &quot;05:00:00&quot; ...
-##  $ crm_atpt_cptd_cd    : Factor w/ 2 levels &quot;ATTEMPTED&quot;,&quot;COMPLETED&quot;: 2 2 2 2 2 2 2 2 2 2 ...
-##  $ hadevelopt          : chr  &quot;(null)&quot; &quot;(null)&quot; &quot;(null)&quot; &quot;(null)&quot; ...
-##  $ jurisdiction_code   : num  0 0 0 0 0 0 0 2 0 0 ...
-##  $ juris_desc          : chr  &quot;N.Y. POLICE DEPT&quot; &quot;N.Y. POLICE DEPT&quot; &quot;N.Y. POLICE DEPT&quot; &quot;N.Y. POLICE DEPT&quot; ...
-##  $ ky_cd               : int  351 341 578 341 341 109 107 109 341 341 ...
-##  $ law_cat_cd          : chr  &quot;MISDEMEANOR&quot; &quot;MISDEMEANOR&quot; &quot;VIOLATION&quot; &quot;MISDEMEANOR&quot; ...
-##  $ loc_of_occur_desc   : chr  &quot;INSIDE&quot; &quot;INSIDE&quot; &quot;FRONT OF&quot; &quot;FRONT OF&quot; ...
-##  $ ofns_desc           : chr  &quot;CRIMINAL MISCHIEF &amp; RELATED OF&quot; &quot;PETIT LARCENY&quot; &quot;HARRASSMENT 2&quot; &quot;PETIT LARCENY&quot; ...
-##  $ parks_nm            : chr  &quot;(null)&quot; &quot;(null)&quot; &quot;(null)&quot; &quot;(null)&quot; ...
-##  $ patrol_boro         : chr  &quot;PATROL BORO BKLYN NORTH&quot; &quot;PATROL BORO QUEENS NORTH&quot; &quot;PATROL BORO STATEN ISLAND&quot; &quot;PATROL BORO QUEENS NORTH&quot; ...
-##  $ pd_cd               : int  259 352 638 357 333 430 233 425 333 338 ...
-##  $ pd_desc             : chr  &quot;CRIMINAL MISCHIEF,UNCLASSIFIED 4&quot; &quot;LARCENY,PETIT FROM BUILDING,UNATTENDED, PACKAGE THEFT INSIDE&quot; &quot;HARASSMENT,SUBD 3,4,5&quot; &quot;LARCENY,PETIT OF VEHICLE ACCES&quot; ...
-##  $ prem_typ_desc       : chr  &quot;GROCERY/BODEGA&quot; &quot;RESIDENCE - APT. HOUSE&quot; &quot;RESIDENCE-HOUSE&quot; &quot;STREET&quot; ...
-##  $ rpt_dt              : Date, format: &quot;2022-06-29&quot; &quot;2022-07-21&quot; &quot;2022-09-11&quot; &quot;2022-04-15&quot; ...
-##  $ station_name        : chr  &quot;(null)&quot; &quot;(null)&quot; &quot;(null)&quot; &quot;(null)&quot; ...
-##  $ susp_age_group      : chr  &quot;UNKNOWN&quot; &quot;UNKNOWN&quot; &quot;UNKNOWN&quot; &quot;(null)&quot; ...
-##  $ susp_race           : chr  &quot;WHITE HISPANIC&quot; &quot;UNKNOWN&quot; &quot;UNKNOWN&quot; &quot;(null)&quot; ...
-##  $ susp_sex            : chr  &quot;M&quot; &quot;U&quot; &quot;U&quot; &quot;(null)&quot; ...
-##  $ vic_age_group       : chr  &quot;UNKNOWN&quot; &quot;25-44&quot; &quot;25-44&quot; &quot;45-64&quot; ...
-##  $ vic_race            : chr  &quot;UNKNOWN&quot; &quot;WHITE&quot; &quot;ASIAN / PACIFIC ISLANDER&quot; &quot;WHITE&quot; ...
-##  $ vic_sex             : chr  &quot;D&quot; &quot;M&quot; &quot;F&quot; &quot;M&quot; ...
-##  $ x_coord_cd          : num  1010273 1011592 962756 1036559 1030269 ...
-##  $ y_coord_cd          : num  183041 222691 162809 220157 189854 ...
-##  $ latitude            : num  40.7 40.8 40.6 40.8 40.7 ...
-##  $ longitude           : num  -73.9 -73.9 -74.1 -73.8 -73.8 ...
-##  $ geocoded_column.type: chr  &quot;Point&quot; &quot;Point&quot; &quot;Point&quot; &quot;Point&quot; ...
-##  $ housing_psa         : num  NA NA NA NA NA NA NA 489 NA NA ...
-##  $ transit_district    : num  NA NA NA NA NA NA NA NA NA NA ...</code></pre>
 <p>The format of dataset is described in section 2.3. In this section, we want to do some cleaning and transformation to the raw dataset to make it tidy.</p>
 <ol style="list-style-type: decimal">
 <li><p>We transform the type of columns to match it’s description. For example, we transform the type of <em>ADDR_PCT_CD</em> to numeric, as it describes the precinct in which the incident occurred. Also, we transform the type of <em>CMPLNT_FR_DT</em> into date, as it describes exact date of occurrence for the reported event.</p></li>
-<li><p>We drop the duplicated columns. For example, <em>Lat_Lon.Latitude</em> is exactly the same as <em>Lat_Lon.Latitude</em>, and <em>Lat_Lon.Longitude</em> is identical to <em>Longitude</em>. Moreover, <em>New Georeferenced Column</em> is just the combination of <em>Latitude</em> and <em>Longitude</em>. Therefore, we drop
+<li><p>We drop the columns carrying the same information. For example, <em>Lat_Lon.Latitude</em> is exactly the same as <em>Lat_Lon.Latitude</em>, and <em>Lat_Lon.Longitude</em> is identical to <em>Longitude</em>. Moreover, <em>New Georeferenced Column</em> is just the combination of <em>Latitude</em> and <em>Longitude</em>. Therefore, we drop
 <em>Lat_Lon</em> and <em>New Georeferenced Column</em> in our dataset.</p></li>
-<li><p>We factorize some variables.</p></li>
+<li><p>we drop the unreasonable rows. For example, there are crimes starting at year 1011, which we believe is a mistake. In addition, in the suspect’s and victim’s ages, there are negative values. So we drop the rows with such mistakes.</p></li>
+<li><p>We factorize some variables. For example, <em>ADDR_PCT_CD</em> describes the precinct in which the incident occurred, so instead of integer, it should be factor. Moreover, some factors are ordinal, like <em>LAW_CAT_CD</em>, it describes the level of offense: felony, misdemeanor, violation, and <em>SUSP_AGE_GROUP</em>, which is the suspect’s age group.</p></li>
 </ol>
+<p>After cleaning and transforming, the description and the class of each column is shown in the table below:</p>
+<table>
+<colgroup>
+<col width="11%" />
+<col width="83%" />
+<col width="5%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">Colname</th>
+<th align="left">Description</th>
+<th align="left">Class</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">ADDR_PCT_CD</td>
+<td align="left">The precinct in which the incident occurred</td>
+<td align="left">factor</td>
+</tr>
+<tr class="even">
+<td align="left">BORO_NM</td>
+<td align="left">The name of the borough in which the incident occurred</td>
+<td align="left">factor</td>
+</tr>
+<tr class="odd">
+<td align="left">CMPLNT_FR_DT</td>
+<td align="left">Exact date of occurrence for the reported event (or starting date of occurrence, if CMPLNT_TO_DT exists)</td>
+<td align="left">Date</td>
+</tr>
+<tr class="even">
+<td align="left">CMPLNT_FR_TM</td>
+<td align="left">Exact time of occurrence for the reported event (or starting time of occurrence, if CMPLNT_TO_TM exists)</td>
+<td align="left">character</td>
+</tr>
+<tr class="odd">
+<td align="left">CMPLNT_NUM</td>
+<td align="left">Randomly generated persistent ID for each complaint</td>
+<td align="left">character</td>
+</tr>
+<tr class="even">
+<td align="left">CMPLNT_TO_DT</td>
+<td align="left">Ending date of occurrence for the reported event, if exact time of occurrence is unknown</td>
+<td align="left">Date</td>
+</tr>
+<tr class="odd">
+<td align="left">CMPLNT_TO_TM</td>
+<td align="left">Ending time of occurrence for the reported event, if exact time of occurrence is unknown</td>
+<td align="left">character</td>
+</tr>
+<tr class="even">
+<td align="left">CRM_ATPT_CPTD_CD</td>
+<td align="left">Indicator of whether crime was successfully completed or attempted, but failed or was interrupted prematurely</td>
+<td align="left">factor</td>
+</tr>
+<tr class="odd">
+<td align="left">HADEVELOPT</td>
+<td align="left">Name of NYCHA housing development of occurrence, if applicable</td>
+<td align="left">factor</td>
+</tr>
+<tr class="even">
+<td align="left">HOUSING_PSA</td>
+<td align="left">Development Level Code</td>
+<td align="left">factor</td>
+</tr>
+<tr class="odd">
+<td align="left">JURIS_DESC</td>
+<td align="left">Description of the jurisdiction code</td>
+<td align="left">factor</td>
+</tr>
+<tr class="even">
+<td align="left">JURISDICTION_CODE</td>
+<td align="left">Jurisdiction responsible for incident. Either internal, like Police(0), Transit(1), and Housing(2); or external(3), like Correction, Port Authority, etc.</td>
+<td align="left">factor</td>
+</tr>
+<tr class="odd">
+<td align="left">KY_CD</td>
+<td align="left">Three digit offense classification code</td>
+<td align="left">factor</td>
+</tr>
+<tr class="even">
+<td align="left">LAW_CAT_CD</td>
+<td align="left">Level of offense: felony, misdemeanor, violation</td>
+<td align="left">factor</td>
+</tr>
+<tr class="odd">
+<td align="left">LOC_OF_OCCUR_DESC</td>
+<td align="left">Specific location of occurrence in or around the premises; inside, opposite of, front of, rear of</td>
+<td align="left">factor</td>
+</tr>
+<tr class="even">
+<td align="left">OFNS_DESC</td>
+<td align="left">Description of offense corresponding with key code</td>
+<td align="left">character</td>
+</tr>
+<tr class="odd">
+<td align="left">PARKS_NM</td>
+<td align="left">Name of NYC park, playground or greenspace of occurrence, if applicable (state parks are not included)</td>
+<td align="left">factor</td>
+</tr>
+<tr class="even">
+<td align="left">PATROL_BORO</td>
+<td align="left">The name of the patrol borough in which the incident occurred</td>
+<td align="left">factor</td>
+</tr>
+<tr class="odd">
+<td align="left">PD_CD</td>
+<td align="left">Three digit internal classification code (more granular than Key Code)</td>
+<td align="left">factor</td>
+</tr>
+<tr class="even">
+<td align="left">PD_DESC</td>
+<td align="left">Description of internal classification corresponding with PD code (more granular than Offense Description)</td>
+<td align="left">character</td>
+</tr>
+<tr class="odd">
+<td align="left">PREM_TYP_DESC</td>
+<td align="left">Specific description of premises; grocery store, residence, street, etc.</td>
+<td align="left">character</td>
+</tr>
+<tr class="even">
+<td align="left">RPT_DT</td>
+<td align="left">Date event was reported to police</td>
+<td align="left">Date</td>
+</tr>
+<tr class="odd">
+<td align="left">STATION_NAME</td>
+<td align="left">Transit station name</td>
+<td align="left">character</td>
+</tr>
+<tr class="even">
+<td align="left">SUSP_AGE_GROUP</td>
+<td align="left">Suspect’s Age Group</td>
+<td align="left">factor</td>
+</tr>
+<tr class="odd">
+<td align="left">SUSP_RACE</td>
+<td align="left">Suspect’s Race Description</td>
+<td align="left">factor</td>
+</tr>
+<tr class="even">
+<td align="left">SUSP_SEX</td>
+<td align="left">Suspect’s Sex Description</td>
+<td align="left">factor</td>
+</tr>
+<tr class="odd">
+<td align="left">TRANSIT_DISTRICT</td>
+<td align="left">Transit district in which the offense occurred.</td>
+<td align="left">factor</td>
+</tr>
+<tr class="even">
+<td align="left">VIC_AGE_GROUP</td>
+<td align="left">Victim’s Age Group</td>
+<td align="left">factor</td>
+</tr>
+<tr class="odd">
+<td align="left">VIC_RACE</td>
+<td align="left">Victim’s Race Description</td>
+<td align="left">factor</td>
+</tr>
+<tr class="even">
+<td align="left">VIC_SEX</td>
+<td align="left">Victim’s Sex Description</td>
+<td align="left">factor</td>
+</tr>
+<tr class="odd">
+<td align="left">X_COORD_CD</td>
+<td align="left">X-coordinate for New York State Plane Coordinate System, Long Island Zone, NAD 83, units feet (FIPS 3104)</td>
+<td align="left">numeric</td>
+</tr>
+<tr class="even">
+<td align="left">Y_COORD_CD</td>
+<td align="left">Y-coordinate for New York State Plane Coordinate System, Long Island Zone, NAD 83, units feet (FIPS 3104)</td>
+<td align="left">numeric</td>
+</tr>
+<tr class="odd">
+<td align="left">GEOCODED_COLUMN.TYPE</td>
+<td align="left"></td>
+<td align="left">factor</td>
+</tr>
+</tbody>
+</table>
 </div>
 <div id="missing-value-analysis" class="section level2 hasAnchor" number="3.3">
 <h2><span class="header-section-number">3.3</span> Missing value analysis<a href="data.html#missing-value-analysis" class="anchor-section" aria-label="Anchor link to header"></a></h2>
