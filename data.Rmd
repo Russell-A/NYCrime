@@ -2,7 +2,40 @@
 
 ## Sources
 
+As discussed in 2.2, data is downloaded from https://data.cityofnewyork.us/Public-Safety/NYPD-Complaint-Data-Current-Year-To-Date-/5uac-w243.
+
 ## Cleaning / transformation
+```{r cleaning and transformation}
+## tranform data type
+df$addr_pct_cd <- as.numeric(df$addr_pct_cd)
+df$cmplnt_fr_dt <- as.Date(df$cmplnt_fr_dt)
+df$cmplnt_to_dt <- as.Date(df$cmplnt_to_dt)
+df$housing_psa <- as.numeric(df$housing_psa)
+df$jurisdiction_code <- as.numeric(df$jurisdiction_code)
+df$ky_cd <- as.integer(df$ky_cd)
+df$pd_cd <- as.integer(df$pd_cd)
+df$rpt_dt <- as.Date(df$rpt_dt)
+df$transit_district <- as.numeric(df$transit_district)
+df$x_coord_cd <- as.numeric(df$x_coord_cd)
+df$y_coord_cd <- as.numeric(df$y_coord_cd)
+df$latitude <- as.numeric(df$latitude)
+df$longitude <- as.numeric(df$longitude)
+
+## drop column
+df = subset(df, select = -c(lat_lon.latitude, lat_lon.longitude, geocoded_column.coordinates))
+
+
+str(df)
+```
+
+The format of dataset is described in section 2.3. In this section, we want to do some cleaning and transformation to the raw dataset to make it tidy.
+
+1. We transform the type of columns to match it's description. For example, we transform the type of *ADDR_PCT_CD* to numeric, as it describes the precinct in which the incident occurred. Also, we transform the type of *CMPLNT_FR_DT* into date, as it describes exact date of occurrence for the reported event. 
+
+2. We drop the duplicated columns. For example, *Lat_Lon.Latitude* is exactly the same as *Lat_Lon.Latitude*, and *Lat_Lon.Longitude* is identical to *Longitude*. Moreover, *New Georeferenced Column* is just the combination of *Latitude* and *Longitude*. Therefore, we drop 
+*Lat_Lon* and *New Georeferenced Column* in our dataset.
+
+3. We factorize some variables.
 
 ## Missing value analysis
 

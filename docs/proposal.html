@@ -23,7 +23,7 @@
 <meta name="author" content="Shumin, Xinhao, and Yuta" />
 
 
-<meta name="date" content="2022-10-31" />
+<meta name="date" content="2022-11-28" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -77,6 +77,7 @@
 <ul>
 <li class="chapter" data-level="2.1" data-path="proposal.html"><a href="proposal.html#research-topic"><i class="fa fa-check"></i><b>2.1</b> Research topic</a></li>
 <li class="chapter" data-level="2.2" data-path="proposal.html"><a href="proposal.html#data-availability"><i class="fa fa-check"></i><b>2.2</b> Data availability</a></li>
+<li class="chapter" data-level="2.3" data-path="proposal.html"><a href="proposal.html#data-format"><i class="fa fa-check"></i><b>2.3</b> Data format</a></li>
 </ul></li>
 <li class="chapter" data-level="3" data-path="data.html"><a href="data.html"><i class="fa fa-check"></i><b>3</b> Data</a>
 <ul>
@@ -127,6 +128,231 @@
 <p>One crucial reason why we select this data source is that NYPD provides numerous accurate reports with detailed and various descriptions. The raw dataset contains approximately 400,000 crime records with 36 variable categories in total. There are many descriptive variables such as exact date of occurrence for the reported event, level of offense including felony, misdemeanor and violation, description of offense, suspect’s age and race group, etc. Supported by these variables of each observation, we can select and analyze data and illustrative information related to our research questions. For example, we need to filter out level of offense as well as description of offense categories in answering question “what type of crimes occur the most/least in NYC”.</p>
 <p>Nevertheless, there are some unimportant variables for our research questions. For example, the exact time of occurrence for the reported event time within a particular day, the name of the patrol borough in which the crime incident occurred and precise physical coordinates of location where reported event occurred. Further, it contains many null/NA values for many observations and unknown values for some observations. For instance, the age and race of suspect could be “unknown” in the dataset. Therefore, we need to remove unnecessary variables and modify the null values in data cleaning process.</p>
 <p>The Socrata Open Data API (SODA) provides programmatic access to this data set including the ability to filter, query, and aggregate data. To download the data in R, we can register an account on NYC Open Data to create an app_token and access the data with Socrata Open Data API, which is a package called RSocrata in R. Once we download the dataset, we can save it locally and load it every time we analyze the data.</p>
+</div>
+<div id="data-format" class="section level2 hasAnchor" number="2.3">
+<h2><span class="header-section-number">2.3</span> Data format<a href="proposal.html#data-format" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<table style="width:100%;">
+<colgroup>
+<col width="13%" />
+<col width="80%" />
+<col width="6%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">colname</th>
+<th align="left">description</th>
+<th align="left">types</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">CMPLNT_NUM</td>
+<td align="left">Randomly generated persistent ID for each complaint</td>
+<td align="left">Plain Text</td>
+</tr>
+<tr class="even">
+<td align="left">ADDR_PCT_CD</td>
+<td align="left">The precinct in which the incident occurred</td>
+<td align="left">Number</td>
+</tr>
+<tr class="odd">
+<td align="left">BORO_NM</td>
+<td align="left">The name of the borough in which the incident occurred</td>
+<td align="left">Plain Text</td>
+</tr>
+<tr class="even">
+<td align="left">CMPLNT_FR_DT</td>
+<td align="left">Exact date of occurrence for the reported event (or starting date of occurrence, if CMPLNT_TO_DT exists)</td>
+<td align="left">Date &amp; Time</td>
+</tr>
+<tr class="odd">
+<td align="left">CMPLNT_FR_TM</td>
+<td align="left">Exact time of occurrence for the reported event (or starting time of occurrence, if CMPLNT_TO_TM exists)</td>
+<td align="left">Plain Text</td>
+</tr>
+<tr class="even">
+<td align="left">CMPLNT_TO_DT</td>
+<td align="left">Ending date of occurrence for the reported event, if exact time of occurrence is unknown</td>
+<td align="left">Date &amp; Time</td>
+</tr>
+<tr class="odd">
+<td align="left">CMPLNT_TO_TM</td>
+<td align="left">Ending time of occurrence for the reported event, if exact time of occurrence is unknown</td>
+<td align="left">Plain Text</td>
+</tr>
+<tr class="even">
+<td align="left">CRM_ATPT_CPTD_CD</td>
+<td align="left">Indicator of whether crime was successfully completed or attempted, but failed or was interrupted prematurely</td>
+<td align="left">Plain Text</td>
+</tr>
+<tr class="odd">
+<td align="left">HADEVELOPT</td>
+<td align="left">Name of NYCHA housing development of occurrence, if applicable</td>
+<td align="left">Plain Text</td>
+</tr>
+<tr class="even">
+<td align="left">HOUSING_PSA</td>
+<td align="left">Development Level Code</td>
+<td align="left">Number</td>
+</tr>
+<tr class="odd">
+<td align="left">JURISDICTION_CODE</td>
+<td align="left">Jurisdiction responsible for incident. Either internal, like Police(0), Transit(1), and Housing(2); or external(3), like Correction, Port Authority, etc.</td>
+<td align="left">Number</td>
+</tr>
+<tr class="even">
+<td align="left">JURIS_DESC</td>
+<td align="left">Description of the jurisdiction code</td>
+<td align="left">Plain Text</td>
+</tr>
+<tr class="odd">
+<td align="left">KY_CD</td>
+<td align="left">Three digit offense classification code</td>
+<td align="left">Number</td>
+</tr>
+<tr class="even">
+<td align="left">LAW_CAT_CD</td>
+<td align="left">Level of offense: felony, misdemeanor, violation</td>
+<td align="left">Plain Text</td>
+</tr>
+<tr class="odd">
+<td align="left">LOC_OF_OCCUR_DESC</td>
+<td align="left">Specific location of occurrence in or around the premises; inside, opposite of, front of, rear of</td>
+<td align="left">Plain Text</td>
+</tr>
+<tr class="even">
+<td align="left">OFNS_DESC</td>
+<td align="left">Description of offense corresponding with key code</td>
+<td align="left">Plain Text</td>
+</tr>
+<tr class="odd">
+<td align="left">PARKS_NM</td>
+<td align="left">Name of NYC park, playground or greenspace of occurrence, if applicable (state parks are not included)</td>
+<td align="left">Plain Text</td>
+</tr>
+<tr class="even">
+<td align="left">PATROL_BORO</td>
+<td align="left">The name of the patrol borough in which the incident occurred</td>
+<td align="left">Plain Text</td>
+</tr>
+<tr class="odd">
+<td align="left">PD_CD</td>
+<td align="left">Three digit internal classification code (more granular than Key Code)</td>
+<td align="left">Number</td>
+</tr>
+<tr class="even">
+<td align="left">PD_DESC</td>
+<td align="left">Description of internal classification corresponding with PD code (more granular than Offense Description)</td>
+<td align="left">Plain Text</td>
+</tr>
+<tr class="odd">
+<td align="left">PREM_TYP_DESC</td>
+<td align="left">Specific description of premises; grocery store, residence, street, etc.</td>
+<td align="left">Plain Text</td>
+</tr>
+<tr class="even">
+<td align="left">RPT_DT</td>
+<td align="left">Date event was reported to police</td>
+<td align="left">Date &amp; Time</td>
+</tr>
+<tr class="odd">
+<td align="left">STATION_NAME</td>
+<td align="left">Transit station name</td>
+<td align="left">Plain Text</td>
+</tr>
+<tr class="even">
+<td align="left">SUSP_AGE_GROUP</td>
+<td align="left">Suspect’s Age Group</td>
+<td align="left">Plain Text</td>
+</tr>
+<tr class="odd">
+<td align="left">SUSP_RACE</td>
+<td align="left">Suspect’s Race Description</td>
+<td align="left">Plain Text</td>
+</tr>
+<tr class="even">
+<td align="left">SUSP_SEX</td>
+<td align="left">Suspect’s Sex Description</td>
+<td align="left">Plain Text</td>
+</tr>
+<tr class="odd">
+<td align="left">TRANSIT_DISTRICT</td>
+<td align="left">Transit district in which the offense occurred.</td>
+<td align="left">Number</td>
+</tr>
+<tr class="even">
+<td align="left">VIC_AGE_GROUP</td>
+<td align="left">Victim’s Age Group</td>
+<td align="left">Plain Text</td>
+</tr>
+<tr class="odd">
+<td align="left">VIC_RACE</td>
+<td align="left">Victim’s Race Description</td>
+<td align="left">Plain Text</td>
+</tr>
+<tr class="even">
+<td align="left">VIC_SEX</td>
+<td align="left">Victim’s Sex Description</td>
+<td align="left">Plain Text</td>
+</tr>
+<tr class="odd">
+<td align="left">X_COORD_CD</td>
+<td align="left">X-coordinate for New York State Plane Coordinate System, Long Island Zone, NAD 83, units feet (FIPS 3104)</td>
+<td align="left">Number</td>
+</tr>
+<tr class="even">
+<td align="left">Y_COORD_CD</td>
+<td align="left">Y-coordinate for New York State Plane Coordinate System, Long Island Zone, NAD 83, units feet (FIPS 3104)</td>
+<td align="left">Number</td>
+</tr>
+<tr class="odd">
+<td align="left">Latitude</td>
+<td align="left">Midblock Latitude coordinate for Global Coordinate System, WGS 1984, decimal degrees (EPSG 4326)</td>
+<td align="left">Number</td>
+</tr>
+<tr class="even">
+<td align="left">Longitude</td>
+<td align="left">Midblock Longitude coordinate for Global Coordinate System, WGS 1984, decimal degrees (EPSG 4326)</td>
+<td align="left">Number</td>
+</tr>
+<tr class="odd">
+<td align="left">Lat_Lon</td>
+<td align="left"></td>
+<td align="left">Location</td>
+</tr>
+<tr class="even">
+<td align="left">New Georeferenced Column</td>
+<td align="left"></td>
+<td align="left">Point</td>
+</tr>
+</tbody>
+</table>
+<pre><code>##                  cmplnt_num                 addr_pct_cd                     boro_nm 
+##                           0                          20                           0 
+##                cmplnt_fr_dt                cmplnt_fr_tm                cmplnt_to_dt 
+##                           0                           0                       29393 
+##                cmplnt_to_tm            crm_atpt_cptd_cd                  hadevelopt 
+##                           0                           0                           0 
+##           jurisdiction_code                  juris_desc                       ky_cd 
+##                           0                           0                           0 
+##                  law_cat_cd           loc_of_occur_desc                   ofns_desc 
+##                           0                           0                           0 
+##                    parks_nm                 patrol_boro                       pd_cd 
+##                           0                           0                         440 
+##                     pd_desc               prem_typ_desc                      rpt_dt 
+##                           0                           0                           0 
+##                station_name              susp_age_group                   susp_race 
+##                           0                           0                           0 
+##                    susp_sex               vic_age_group                    vic_race 
+##                           0                           0                           0 
+##                     vic_sex                  x_coord_cd                  y_coord_cd 
+##                           0                           9                           9 
+##                    latitude                   longitude            lat_lon.latitude 
+##                           9                           9                           9 
+##           lat_lon.longitude        geocoded_column.type geocoded_column.coordinates 
+##                           9                           9                           0 
+##                 housing_psa            transit_district 
+##                      371512                      388677</code></pre>
 
 </div>
 </div>
