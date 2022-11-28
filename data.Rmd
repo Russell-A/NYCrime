@@ -24,9 +24,12 @@ df$longitude <- as.numeric(df$longitude)
 ## drop column
 df = subset(df, select = -c(lat_lon.latitude, lat_lon.longitude, geocoded_column.coordinates))
 
+<<<<<<< HEAD
 ## factorize column
 df$boro_nm <- as.factor(df$boro_nm)
 df$crm_atpt_cptd_cd <- as.factor(df$crm_atpt_cptd_cd)
+=======
+>>>>>>> b9ede25e24215ad6a87f3b39fa61605dee4e125d
 
 str(df)
 ```
