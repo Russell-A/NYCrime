@@ -117,11 +117,11 @@
 <h2><span class="header-section-number">3.2</span> Cleaning / transformation<a href="data.html#cleaning-transformation" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>The format of dataset is described in section 2.3. In this section, we want to do some cleaning and transformation to the raw dataset to make it tidy.</p>
 <ol style="list-style-type: decimal">
-<li><p>We transform the type of columns to match it’s description. For example, we transform the type of <em>ADDR_PCT_CD</em> to numeric, as it describes the precinct in which the incident occurred. Also, we transform the type of <em>CMPLNT_FR_DT</em> into date, as it describes exact date of occurrence for the reported event.</p></li>
-<li><p>We drop the columns carrying the same information. For example, <em>Lat_Lon.Latitude</em> is exactly the same as <em>Lat_Lon.Latitude</em>, and <em>Lat_Lon.Longitude</em> is identical to <em>Longitude</em>. Moreover, <em>New Georeferenced Column</em> is just the combination of <em>Latitude</em> and <em>Longitude</em>. Therefore, we drop
-<em>Lat_Lon</em> and <em>New Georeferenced Column</em> in our dataset.</p></li>
+<li><p>We transform the type of columns to match it’s description. For example, we transform the type of <strong>ADDR_PCT_CD</strong> to numeric, as it describes the precinct in which the incident occurred. Also, we transform the type of <strong>CMPLNT_FR_DT</strong> into date, as it describes exact date of occurrence for the reported event.</p></li>
+<li><p>We drop the columns carrying the same information. For example, <strong>Lat_Lon.Latitude</strong> is exactly the same as <strong>Lat_Lon.Latitude</strong>, and <strong>Lat_Lon.Longitude</strong> is identical to <strong>Longitude</strong>. Moreover, <strong>New Georeferenced Column</strong> is just the combination of <strong>Latitude</strong> and <strong>Longitude</strong>. Therefore, we drop
+<strong>Lat_Lon</strong> and <strong>New Georeferenced Column</strong> in our dataset.</p></li>
 <li><p>we drop the unreasonable rows. For example, there are crimes starting at year 1011, which we believe is a mistake. In addition, in the suspect’s and victim’s ages, there are negative values. So we drop the rows with such mistakes.</p></li>
-<li><p>We factorize some variables. For example, <em>ADDR_PCT_CD</em> describes the precinct in which the incident occurred, so instead of integer, it should be factor. Moreover, some factors are ordinal, like <em>LAW_CAT_CD</em>, it describes the level of offense: felony, misdemeanor, violation, and <em>SUSP_AGE_GROUP</em>, which is the suspect’s age group.</p></li>
+<li><p>We factorize some variables. For example, <strong>ADDR_PCT_CD</strong> describes the precinct in which the incident occurred, so instead of integer, it should be factor. Moreover, some factors are ordinal, like <strong>LAW_CAT_CD</strong>, it describes the level of offense: felony, misdemeanor, violation, and <strong>SUSP_AGE_GROUP</strong>, which is the suspect’s age group.</p></li>
 </ol>
 <p>After cleaning and transforming, the description and the class of each column is shown in the table below:</p>
 <table>

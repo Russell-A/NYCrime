@@ -55,14 +55,14 @@ df$geocoded_column.type <- as.factor(df$geocoded_column.type)
 
 The format of dataset is described in section 2.3. In this section, we want to do some cleaning and transformation to the raw dataset to make it tidy.
 
-1. We transform the type of columns to match it's description. For example, we transform the type of *ADDR_PCT_CD* to numeric, as it describes the precinct in which the incident occurred. Also, we transform the type of *CMPLNT_FR_DT* into date, as it describes exact date of occurrence for the reported event. 
+1. We transform the type of columns to match it's description. For example, we transform the type of **ADDR_PCT_CD** to numeric, as it describes the precinct in which the incident occurred. Also, we transform the type of **CMPLNT_FR_DT** into date, as it describes exact date of occurrence for the reported event. 
 
-2. We drop the columns carrying the same information. For example, *Lat_Lon.Latitude* is exactly the same as *Lat_Lon.Latitude*, and *Lat_Lon.Longitude* is identical to *Longitude*. Moreover, *New Georeferenced Column* is just the combination of *Latitude* and *Longitude*. Therefore, we drop 
-*Lat_Lon* and *New Georeferenced Column* in our dataset.
+2. We drop the columns carrying the same information. For example, **Lat_Lon.Latitude** is exactly the same as **Lat_Lon.Latitude**, and **Lat_Lon.Longitude** is identical to **Longitude**. Moreover, **New Georeferenced Column** is just the combination of **Latitude** and **Longitude**. Therefore, we drop 
+**Lat_Lon** and **New Georeferenced Column** in our dataset.
 
 3. we drop the unreasonable rows. For example, there are crimes starting at year 1011, which we believe is a mistake. In addition, in the suspect's and victim's ages, there are negative values. So we drop the rows with such mistakes.
 
-4. We factorize some variables. For example, *ADDR_PCT_CD* describes the precinct in which the incident occurred, so instead of integer, it should be factor. Moreover, some factors are ordinal, like *LAW_CAT_CD*, it describes the level of offense: felony, misdemeanor, violation, and *SUSP_AGE_GROUP*,	which is the suspect’s age group.
+4. We factorize some variables. For example, **ADDR_PCT_CD** describes the precinct in which the incident occurred, so instead of integer, it should be factor. Moreover, some factors are ordinal, like **LAW_CAT_CD**, it describes the level of offense: felony, misdemeanor, violation, and **SUSP_AGE_GROUP**,	which is the suspect’s age group.
 
 After cleaning and transforming, the description and the class of each column is shown in the table below:
 ```{r cleaning and transformation1}
