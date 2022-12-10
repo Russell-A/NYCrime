@@ -142,5 +142,3 @@ Based on two horizontal bar charts above that show the total number of NA values
 6. In bar chart of number of Unknown values, variable **PD_DESC** has 1221 Unknown values. Since this just occupy less than 0.5% of total data, we will directly remove observations with Unknown values in **PD_DESC** in our result analysis.
 
 
-
-
