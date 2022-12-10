@@ -6,7 +6,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <title>Chapter 3 Data | NYC crimes</title>
   <meta name="description" content="Chapter 3 Data | NYC crimes" />
-  <meta name="generator" content="bookdown 0.29 and GitBook 2.6.7" />
+  <meta name="generator" content="bookdown 0.30 and GitBook 2.6.7" />
 
   <meta property="og:title" content="Chapter 3 Data | NYC crimes" />
   <meta property="og:type" content="book" />
@@ -23,7 +23,7 @@
 <meta name="author" content="Shumin, Xinhao, and Yuta" />
 
 
-<meta name="date" content="2022-11-28" />
+<meta name="date" content="2022-12-10" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -52,6 +52,13 @@
 <link href="libs/anchor-sections-1.1.0/anchor-sections.css" rel="stylesheet" />
 <link href="libs/anchor-sections-1.1.0/anchor-sections-hash.css" rel="stylesheet" />
 <script src="libs/anchor-sections-1.1.0/anchor-sections.js"></script>
+<script src="libs/htmlwidgets-1.5.4/htmlwidgets.js"></script>
+<script src="libs/plotly-binding-4.10.1/plotly.js"></script>
+<script src="libs/typedarray-0.1/typedarray.min.js"></script>
+<link href="libs/crosstalk-1.2.0/css/crosstalk.min.css" rel="stylesheet" />
+<script src="libs/crosstalk-1.2.0/js/crosstalk.min.js"></script>
+<link href="libs/plotly-htmlwidgets-css-2.11.1/plotly-htmlwidgets.css" rel="stylesheet" />
+<script src="libs/plotly-main-2.11.1/plotly-latest.min.js"></script>
 
 
 
@@ -308,6 +315,206 @@
 </div>
 <div id="missing-value-analysis" class="section level2 hasAnchor" number="3.3">
 <h2><span class="header-section-number">3.3</span> Missing value analysis<a href="data.html#missing-value-analysis" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<pre><code>## [1] TRUE</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="left">variables</th>
+<th align="right">na_nums</th>
+<th align="right">unknown_nums</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">cmplnt_num</td>
+<td align="right">0</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td align="left">addr_pct_cd</td>
+<td align="right">20</td>
+<td align="right">0</td>
+</tr>
+<tr class="odd">
+<td align="left">boro_nm</td>
+<td align="right">657</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td align="left">cmplnt_fr_dt</td>
+<td align="right">0</td>
+<td align="right">0</td>
+</tr>
+<tr class="odd">
+<td align="left">cmplnt_fr_tm</td>
+<td align="right">0</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td align="left">cmplnt_to_dt</td>
+<td align="right">29380</td>
+<td align="right">0</td>
+</tr>
+<tr class="odd">
+<td align="left">cmplnt_to_tm</td>
+<td align="right">29262</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td align="left">crm_atpt_cptd_cd</td>
+<td align="right">0</td>
+<td align="right">0</td>
+</tr>
+<tr class="odd">
+<td align="left">hadevelopt</td>
+<td align="right">395630</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td align="left">jurisdiction_code</td>
+<td align="right">0</td>
+<td align="right">0</td>
+</tr>
+<tr class="odd">
+<td align="left">juris_desc</td>
+<td align="right">0</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td align="left">ky_cd</td>
+<td align="right">0</td>
+<td align="right">0</td>
+</tr>
+<tr class="odd">
+<td align="left">law_cat_cd</td>
+<td align="right">0</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td align="left">loc_of_occur_desc</td>
+<td align="right">66072</td>
+<td align="right">0</td>
+</tr>
+<tr class="odd">
+<td align="left">ofns_desc</td>
+<td align="right">5</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td align="left">parks_nm</td>
+<td align="right">394169</td>
+<td align="right">0</td>
+</tr>
+<tr class="odd">
+<td align="left">patrol_boro</td>
+<td align="right">2</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td align="left">pd_cd</td>
+<td align="right">437</td>
+<td align="right">0</td>
+</tr>
+<tr class="odd">
+<td align="left">pd_desc</td>
+<td align="right">437</td>
+<td align="right">1221</td>
+</tr>
+<tr class="even">
+<td align="left">prem_typ_desc</td>
+<td align="right">474</td>
+<td align="right">0</td>
+</tr>
+<tr class="odd">
+<td align="left">rpt_dt</td>
+<td align="right">0</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td align="left">station_name</td>
+<td align="right">388551</td>
+<td align="right">0</td>
+</tr>
+<tr class="odd">
+<td align="left">susp_age_group</td>
+<td align="right">73511</td>
+<td align="right">152659</td>
+</tr>
+<tr class="even">
+<td align="left">susp_race</td>
+<td align="right">73511</td>
+<td align="right">99078</td>
+</tr>
+<tr class="odd">
+<td align="left">susp_sex</td>
+<td align="right">73511</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td align="left">vic_age_group</td>
+<td align="right">0</td>
+<td align="right">111822</td>
+</tr>
+<tr class="odd">
+<td align="left">vic_race</td>
+<td align="right">104</td>
+<td align="right">119927</td>
+</tr>
+<tr class="even">
+<td align="left">vic_sex</td>
+<td align="right">0</td>
+<td align="right">0</td>
+</tr>
+<tr class="odd">
+<td align="left">x_coord_cd</td>
+<td align="right">9</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td align="left">y_coord_cd</td>
+<td align="right">9</td>
+<td align="right">0</td>
+</tr>
+<tr class="odd">
+<td align="left">latitude</td>
+<td align="right">9</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td align="left">longitude</td>
+<td align="right">9</td>
+<td align="right">0</td>
+</tr>
+<tr class="odd">
+<td align="left">geocoded_column.type</td>
+<td align="right">9</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td align="left">housing_psa</td>
+<td align="right">371401</td>
+<td align="right">0</td>
+</tr>
+<tr class="odd">
+<td align="left">transit_district</td>
+<td align="right">388551</td>
+<td align="right">0</td>
+</tr>
+</tbody>
+</table>
+<div id="htmlwidget-00b02d192bfbd1b5cc4b" style="width:672px;height:480px;" class="plotly html-widget"></div>
+<script type="application/json" data-for="htmlwidget-00b02d192bfbd1b5cc4b">{"x":{"visdat":{"3ef87a646bab":["function () ","plotlyVisDat"]},"cur_data":"3ef87a646bab","attrs":{"3ef87a646bab":{"x":{},"y":{},"orientation":"h","marker":{"color":"cadeblue2"},"alpha_stroke":1,"sizes":[10,100],"spans":[1,20],"type":"bar"}},"layout":{"margin":{"b":70,"l":100,"t":70,"r":20},"title":"Bar chart of number of NA values in each variable from dataset","legend":{"x":0,"y":0,"font":{"size":10}},"xaxis":{"domain":[0,1],"automargin":true,"title":"na_nums"},"yaxis":{"domain":[0,1],"automargin":true,"title":"variables","type":"category","categoryorder":"array","categoryarray":["addr_pct_cd","boro_nm","cmplnt_fr_dt","cmplnt_fr_tm","cmplnt_num","cmplnt_to_dt","cmplnt_to_tm","crm_atpt_cptd_cd","geocoded_column.type","hadevelopt","housing_psa","juris_desc","jurisdiction_code","ky_cd","latitude","law_cat_cd","loc_of_occur_desc","longitude","ofns_desc","parks_nm","patrol_boro","pd_cd","pd_desc","prem_typ_desc","rpt_dt","station_name","susp_age_group","susp_race","susp_sex","transit_district","vic_age_group","vic_race","vic_sex","x_coord_cd","y_coord_cd"]},"hovermode":"closest","showlegend":false},"source":"A","config":{"modeBarButtonsToAdd":["hoverclosest","hovercompare"],"showSendToCloud":false},"data":[{"x":[0,20,657,0,0,29380,29262,0,395630,0,0,0,0,66072,5,394169,2,437,437,474,0,388551,73511,73511,73511,0,104,0,9,9,9,9,9,371401,388551],"y":["cmplnt_num","addr_pct_cd","boro_nm","cmplnt_fr_dt","cmplnt_fr_tm","cmplnt_to_dt","cmplnt_to_tm","crm_atpt_cptd_cd","hadevelopt","jurisdiction_code","juris_desc","ky_cd","law_cat_cd","loc_of_occur_desc","ofns_desc","parks_nm","patrol_boro","pd_cd","pd_desc","prem_typ_desc","rpt_dt","station_name","susp_age_group","susp_race","susp_sex","vic_age_group","vic_race","vic_sex","x_coord_cd","y_coord_cd","latitude","longitude","geocoded_column.type","housing_psa","transit_district"],"orientation":"h","marker":{"color":"cadeblue2","line":{"color":"rgba(31,119,180,1)"}},"type":"bar","error_y":{"color":"rgba(31,119,180,1)"},"error_x":{"color":"rgba(31,119,180,1)"},"xaxis":"x","yaxis":"y","frame":null}],"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.2,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script>
+<div id="htmlwidget-2493547fd243b1c3760e" style="width:672px;height:480px;" class="plotly html-widget"></div>
+<script type="application/json" data-for="htmlwidget-2493547fd243b1c3760e">{"x":{"visdat":{"3ef81f74778":["function () ","plotlyVisDat"]},"cur_data":"3ef81f74778","attrs":{"3ef81f74778":{"x":{},"y":{},"orientation":"h","marker":{"color":"cadeblue2"},"alpha_stroke":1,"sizes":[10,100],"spans":[1,20],"type":"bar"}},"layout":{"margin":{"b":70,"l":100,"t":70,"r":20},"title":"Bar chart of number of Unknown values in each variable from dataset","legend":{"x":0,"y":0,"font":{"size":10}},"xaxis":{"domain":[0,1],"automargin":true,"title":"unknown_nums"},"yaxis":{"domain":[0,1],"automargin":true,"title":"variables","type":"category","categoryorder":"array","categoryarray":["addr_pct_cd","boro_nm","cmplnt_fr_dt","cmplnt_fr_tm","cmplnt_num","cmplnt_to_dt","cmplnt_to_tm","crm_atpt_cptd_cd","geocoded_column.type","hadevelopt","housing_psa","juris_desc","jurisdiction_code","ky_cd","latitude","law_cat_cd","loc_of_occur_desc","longitude","ofns_desc","parks_nm","patrol_boro","pd_cd","pd_desc","prem_typ_desc","rpt_dt","station_name","susp_age_group","susp_race","susp_sex","transit_district","vic_age_group","vic_race","vic_sex","x_coord_cd","y_coord_cd"]},"hovermode":"closest","showlegend":false},"source":"A","config":{"modeBarButtonsToAdd":["hoverclosest","hovercompare"],"showSendToCloud":false},"data":[{"x":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1221,0,0,0,152659,99078,0,111822,119927,0,0,0,0,0,0,0,0],"y":["cmplnt_num","addr_pct_cd","boro_nm","cmplnt_fr_dt","cmplnt_fr_tm","cmplnt_to_dt","cmplnt_to_tm","crm_atpt_cptd_cd","hadevelopt","jurisdiction_code","juris_desc","ky_cd","law_cat_cd","loc_of_occur_desc","ofns_desc","parks_nm","patrol_boro","pd_cd","pd_desc","prem_typ_desc","rpt_dt","station_name","susp_age_group","susp_race","susp_sex","vic_age_group","vic_race","vic_sex","x_coord_cd","y_coord_cd","latitude","longitude","geocoded_column.type","housing_psa","transit_district"],"orientation":"h","marker":{"color":"cadeblue2","line":{"color":"rgba(31,119,180,1)"}},"type":"bar","error_y":{"color":"rgba(31,119,180,1)"},"error_x":{"color":"rgba(31,119,180,1)"},"xaxis":"x","yaxis":"y","frame":null}],"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.2,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script>
+<p>Based on two horizontal bar charts above that show the total number of NA values as well as Unknown values in each variable from dataset, we can see several apparent features in missing values:</p>
+<ol style="list-style-type: decimal">
+<li><p>In bar chart of number of NA values, variable <strong>TRANSIT_DISTRICT</strong> and <strong>STATION_NAME</strong> are positively associated because they represent transit district in which the offense occurred and transit police station name respectively. Since each of these two variables has more than 300k NA values, which is more than 92% of total observations in dataset, and we only focus on where did a crime occur, we can drop these two variables in our result analysis part.Similarly, variable <strong>PARKS_NM, HOUSING_PSA, HADEVELOP</strong> have a positive correlation. This means if an observation has NA value in one of these three variables, then there is high probability that such observation will have NA values in other two variables. Since each of these three variables has more than 300k NA values and they are not related to our research questions, we will remove these variables in result analysis part.</p></li>
+<li><p>In bar chart of number of NA values, variable <strong>SUSP_SEX, SUSP_RACE, SUSP_AGE_GROUP</strong> have same number of NA values of 73511, so they are having a positive correlation = 1. This means if an observation has NA value in one of these three variables, then this observation record will have NA values in other two variables. Since we only focus on victims attributes in our research questions, we will remove these three variables in result analysis. Similarly, variable <strong>CMPLNT_TO_TM, CMPLNT_TO_DT</strong> have same number of NA values of 29262. They have a positive correlation = 1. Since we are only focus on occurred date of crimes, we will not select these 2 variables in our result analysis.</p></li>
+<li><p>In bar chart of number of NA values, there are <strong>ADDR_PCT_CD, BORO_NM, OFNS_DESC, PATROL_BORO, PD_CD, PD_DESC, PREM_TYP_DESC, VIC_RACE, X_COORD_CD, Y_COORD_CD, Geocoded_Column.type</strong> variables having NA values that are less than 1k. We will directly delete observations with NA values in these variables in our result analysis since total number of such observations only occupy approximately 0.5% of all data.</p></li>
+<li><p>In bar chart of number of Unknown values, variable <strong>VIC_RACE</strong> and <strong>VIC_AGE_GROUP</strong> have a strong positive correlation. <strong>VIC_RACE</strong> has 119.927k Unknown values while <strong>VIC_AGE_GROUP</strong> has 111.822k Unknown values, both of them occupy more than 28% of total observations. We will delete observations with Unknown values in making graphs of victim race and victim age group distribution over different areas of NYC. However, since there is a moderate portion of Unknown values in these two variables and we need to show that remaining data is not biased, we will make a bar chart to show distribution of observations with Unknown values in <strong>VIC_RACE</strong> and <strong>VIC_AGE_GROUP</strong> over boroughs of NYC.</p></li>
+<li><p>In bar chart of number of Unknown values, variable <strong>SUSP_RACE, SUSP_AGE_GROUP</strong> have a strong positive correlation. Since each of these two variables has more than 99k Unknown values and we only focus on victims attributes in our research questions, we will remove these three variables in result analysis.</p></li>
+<li><p>In bar chart of number of Unknown values, variable <strong>PD_DESC</strong> has 1221 Unknown values. Since this just occupy less than 0.5% of total data, we will directly remove observations with Unknown values in <strong>PD_DESC</strong> in our result analysis.</p></li>
+</ol>
 
 </div>
 </div>
