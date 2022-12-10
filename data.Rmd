@@ -6,7 +6,7 @@ As discussed in 2.2, data is downloaded from https://data.cityofnewyork.us/Publi
 
 ## Cleaning / transformation
 ```{r cleaning and transformation}
-## tranform data type
+## transform data type
 df$addr_pct_cd <- as.numeric(df$addr_pct_cd)
 df$cmplnt_fr_dt <- as.Date(df$cmplnt_fr_dt)
 df$cmplnt_to_dt <- as.Date(df$cmplnt_to_dt)
@@ -71,11 +71,76 @@ Description = c('Randomly generated persistent ID for each complaint', 'The prec
 t <- data.frame(Colname, Description)
 t1 <- as.data.frame(list(Colname = toupper(colnames(df)), Class = sapply(df, class)), row.names = NULL)
 t$colname <- toupper(t$Colname)
-t2<-merge(t1, t) %>% select(1,3,2) %>%add_row(Colname = "Geocoded_Column.type", Description = 'Type of the geographical location', Class = "factor")
+t2<-merge(t1, t) %>% 
+  select(1,3,2) %>% add_row(Colname = "Geocoded_Column.type", Description = 'Type of the geographical location', 
+                           Class = "factor")
 knitr::kable(t2)
 ```
 
 
 
 ## Missing value analysis
+```{r missing value analysis}
+library(dplyr)
+library(stringr)
+library(knitr)
+library(plotly)
+
+# replace null values to NA 
+df <- df %>% mutate_all(funs(str_replace(., "(null)", "NA")))
+df[df == "(NA)"] <- NA
+is.na(df$hadevelopt[1])
+
+# create data frame for NA and Unknown values in each variable of dataset 
+variables <- c(colnames(df))
+na_nums <- c(1:35)
+unknown_nums <- c(1:35)
+for (i in 1:ncol(df)) {
+  na_count <- sum(is.na(df[,i]))
+  na_nums[i] <- na_count
+  unknown_count <- sum(str_detect(na.omit(df[,i]), "UNKNOWN"))
+  unknown_nums[i] <- unknown_count
+}
+
+na_values_stat <- data.frame(variables, na_nums, unknown_nums)
+
+# show exact number of na values and unknown values in each variable
+kable(na_values_stat)
+
+# present graph of na_values_stat
+na_values_fig <- plot_ly(na_values_stat, x = ~na_nums, y = ~variables, type = 'bar',
+                         orientation = 'h', marker = list(color = 'cadeblue2'))
+na_values_fig <- na_values_fig %>% layout(
+  title = 'Bar chart of number of NA values in each variable from dataset',
+  legend = list(x = 0, y = 0, font = list(size = 10)),
+  margin = list(l = 100, r = 20, t = 70, b = 70)
+)
+na_values_fig
+
+unknown_values_fig <- plot_ly(na_values_stat, x = ~unknown_nums, y = ~variables, type = 'bar',
+                         orientation = 'h', marker = list(color = 'cadeblue2'))
+unknown_values_fig <- unknown_values_fig %>% layout(
+  title = 'Bar chart of number of Unknown values in each variable from dataset',
+  legend = list(x = 0, y = 0, font = list(size = 10)),
+  margin = list(l = 100, r = 20, t = 70, b = 70)
+)
+unknown_values_fig
+
+```
+
+Based on two horizontal bar charts above that show the total number of NA values as well as Unknown values in each variable from dataset, we can see several apparent features in missing values:
+1. In bar chart of number of NA values, variable **TRANSIT_DISTRICT** and **STATION_NAME** are positively associated because they represent transit district in which the offense occurred and transit police station name respectively. Since each of these two variables has more than 300k NA values, which is more than 92% of total observations in dataset, and we only focus on where did a crime occur, we can drop these two variables in our result analysis part.Similarly, variable **PARKS_NM, HOUSING_PSA, HADEVELOP** have a positive correlation. This means if an observation has NA value in one of these three variables, then there is high probability that such observation will have NA values in other two variables. Since each of these three variables has more than 300k NA values and they are not related to our research questions, we will remove these variables in result analysis part.
+
+2. In bar chart of number of NA values, variable **SUSP_SEX, SUSP_RACE, SUSP_AGE_GROUP** have same number of NA values of 73511, so they are having a positive correlation = 1. This means if an observation has NA value in one of these three variables, then this observation record will have NA values in other two variables. Since we only focus on victims attributes in our research questions, we will remove these three variables in result analysis. Similarly, variable **CMPLNT_TO_TM, CMPLNT_TO_DT** have same number of NA values of 29262. They have a positive correlation = 1. Since we are only focus on occurred date of crimes, we will not select these 2 variables in our result analysis. 
+
+3. In bar chart of number of NA values, there are **ADDR_PCT_CD, BORO_NM, OFNS_DESC, PATROL_BORO, PD_CD, PD_DESC, PREM_TYP_DESC, VIC_RACE, X_COORD_CD, Y_COORD_CD, Geocoded_Column.type** variables having NA values that are less than 1k. We will directly delete observations with NA values in these variables in our result analysis since total number of such observations only occupy approximately 0.5% of all data.
+
+4. In bar chart of number of Unknown values, variable **VIC_RACE** and **VIC_AGE_GROUP** have a strong positive correlation. **VIC_RACE** has 119.927k Unknown values while **VIC_AGE_GROUP** has 111.822k Unknown values, both of them occupy more than 28% of total observations. We will delete observations with Unknown values in making graphs of victim race and victim age group distribution over different areas of NYC. However, since there is a moderate portion of Unknown values in these two variables and we need to show that remaining data is not biased, we will make a bar chart to show distribution of observations with Unknown values in **VIC_RACE** and **VIC_AGE_GROUP** over boroughs of NYC.
+
+5. In bar chart of number of Unknown values, variable **SUSP_RACE, SUSP_AGE_GROUP** have a strong positive correlation. Since each of these two variables has more than 99k Unknown values and we only focus on victims attributes in our research questions, we will remove these three variables in result analysis.
+
+6. In bar chart of number of Unknown values, variable **PD_DESC** has 1221 Unknown values. Since this just occupy less than 0.5% of total data, we will directly remove observations with Unknown values in **PD_DESC** in our result analysis.
+
+
+
 
