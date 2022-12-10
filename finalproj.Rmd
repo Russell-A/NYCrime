@@ -1,0 +1,235 @@
+--- 
+title: "NYC crimes"
+author: "Shumin, Xinhao, and Yuta"
+date: "`r Sys.Date()`"
+site: bookdown::bookdown_site
+---
+--- 
+title: "NYC crimes"
+author: "Shumin, Xinhao, and Yuta"
+date: "`r Sys.Date()`"
+site: bookdown::bookdown_site
+---
+```{r include=FALSE, cache=FALSE}
+knitr::opts_chunk$set(
+  echo = FALSE,
+  message = FALSE,
+  warning = FALSE
+)
+```
+
+# Introduction
+
+New York City, where we are living and studying, is one of the biggest and busiest cities in the world. The population is over 8 million as of 2021, which is largest of all cities in the United States, according to [United States Census Bureau](https://www.census.gov/popclock/). However, the Big Apple is not only exciting but also infamous for the high crime rate, especially the hike after the COVID-19 pandemic. Actually, we can see horrible news on a crime almost everyday (it seems to be a hundred times more than my home country...). Our motivation for choosing this topic, NYC crimes, is here: in order to live in the city at ease, we are very curious about the crime data to understand what occurs.
+
+Through this project, we would like to clarify and answer questions below:
+
+-   what type of crimes occur the most/least;
+
+-   where crimes occur the most/least;
+
+-   what type of people are likely to be victims;
+
+-   do the characteristics above differ depending on the time the incident occurs (morning, daytime, night...);
+
+-   is there any trends or changes in terms of time series.
+
+
+<!--chapter:end:index.Rmd-->
+
+
+# Proposal
+
+Placeholder
+
+
+## Research topic
+## Data availability
+## Data format
+
+<!--chapter:end:proposal.Rmd-->
+
+```{r include=FALSE, cache=FALSE}
+knitr::opts_chunk$set(
+  echo = FALSE,
+  message = FALSE,
+  warning = FALSE
+)
+```
+# Data 
+
+## Sources
+
+As discussed in 2.2, data is downloaded from https://data.cityofnewyork.us/Public-Safety/NYPD-Complaint-Data-Current-Year-To-Date-/5uac-w243.
+
+## Cleaning / transformation
+```{r cleaning and transformation}
+## transform data type
+df$addr_pct_cd <- as.numeric(df$addr_pct_cd)
+df$cmplnt_fr_dt <- as.Date(df$cmplnt_fr_dt)
+df$cmplnt_to_dt <- as.Date(df$cmplnt_to_dt)
+df$housing_psa <- as.numeric(df$housing_psa)
+df$jurisdiction_code <- as.numeric(df$jurisdiction_code)
+df$ky_cd <- as.integer(df$ky_cd)
+df$pd_cd <- as.integer(df$pd_cd)
+df$rpt_dt <- as.Date(df$rpt_dt)
+df$transit_district <- as.numeric(df$transit_district)
+df$x_coord_cd <- as.numeric(df$x_coord_cd)
+df$y_coord_cd <- as.numeric(df$y_coord_cd)
+df$latitude <- as.numeric(df$latitude)
+df$longitude <- as.numeric(df$longitude)
+
+## drop column
+df = df[,!(names(df) %in% c("lat_lon.latitude", "lat_lon.longitude", "geocoded_column.coordinates"))]
+
+## drop row
+df <- subset(df, cmplnt_fr_dt >= as.Date("2000-01-01"))
+df <- subset(df, (susp_age_group %in% c("UNKNOWN","(null)","<18","18-24","25-44","45-64","65+")))
+df <- subset(df, (vic_age_group %in% c("UNKNOWN","(null)","<18","18-24","25-44","45-64","65+")))
+
+## factorize column
+df$addr_pct_cd <- as.factor(df$addr_pct_cd)
+df$boro_nm <- as.factor(df$boro_nm)
+df$crm_atpt_cptd_cd <- as.factor(df$crm_atpt_cptd_cd)
+df$hadevelopt <- as.factor(df$hadevelopt)
+df$jurisdiction_code <- as.factor(df$jurisdiction_code)
+df$juris_desc <- as.factor(df$juris_desc)
+df$ky_cd <- as.factor(df$ky_cd)
+df$law_cat_cd <- factor(df$law_cat_cd, levels = c( "VIOLATION", "MISDEMEANOR", "FELONY"))
+df$loc_of_occur_desc <- as.factor(df$loc_of_occur_desc)
+df$parks_nm <- as.factor(df$parks_nm)
+df$patrol_boro <- as.factor(df$patrol_boro)
+df$pd_cd <- as.factor(df$pd_cd)
+df$susp_age_group <- factor(df$susp_age_group, levels = c("UNKNOWN","(null)","<18","18-24","25-44","45-64","65+"))
+df$susp_race <- as.factor(df$susp_race)
+df$susp_sex <- as.factor(df$susp_sex)
+df$vic_age_group <- factor(df$vic_age_group, levels = c("UNKNOWN","(null)","<18","18-24","25-44","45-64","65+"))
+df$vic_race <- as.factor(df$vic_race)
+df$vic_sex <- as.factor(df$vic_sex)
+df$housing_psa <- as.factor(df$housing_psa)
+df$transit_district <- as.factor(df$transit_district)
+df$geocoded_column.type <- as.factor(df$geocoded_column.type)
+```
+
+The format of dataset is described in section 2.3. In this section, we want to do some cleaning and transformation to the raw dataset to make it tidy.
+
+1. We transform the type of columns to match it's description. For example, we transform the type of **ADDR_PCT_CD** to numeric, as it describes the precinct in which the incident occurred. Also, we transform the type of **CMPLNT_FR_DT** into date, as it describes exact date of occurrence for the reported event. 
+
+2. We drop the columns carrying the same information. For example, **Lat_Lon.Latitude** is exactly the same as **Lat_Lon.Latitude**, and **Lat_Lon.Longitude** is identical to **Longitude**. Moreover, **New Georeferenced Column** is just the combination of **Latitude** and **Longitude**. Therefore, we drop 
+**Lat_Lon** and **New Georeferenced Column** in our dataset.
+
+3. we drop the unreasonable rows. For example, there are crimes starting at year 1011, which we believe is a mistake. In addition, in the suspect's and victim's ages, there are negative values. So we drop the rows with such mistakes.
+
+4. We factorize some variables. For example, **ADDR_PCT_CD** describes the precinct in which the incident occurred, so instead of integer, it should be factor. Moreover, some factors are ordinal, like **LAW_CAT_CD**, it describes the level of offense: felony, misdemeanor, violation, and **SUSP_AGE_GROUP**,	which is the suspect’s age group.
+
+After cleaning and transforming, the description and the class of each column is shown in the table below:
+```{r cleaning and transformation1}
+Colname <- c('CMPLNT_NUM', 'ADDR_PCT_CD', 'BORO_NM', 'CMPLNT_FR_DT', 'CMPLNT_FR_TM', 'CMPLNT_TO_DT', 'CMPLNT_TO_TM', 'CRM_ATPT_CPTD_CD', 'HADEVELOPT', 'HOUSING_PSA', 'JURISDICTION_CODE', 'JURIS_DESC', 'KY_CD', 'LAW_CAT_CD', 'LOC_OF_OCCUR_DESC', 'OFNS_DESC', 'PARKS_NM', 'PATROL_BORO', 'PD_CD', 'PD_DESC', 'PREM_TYP_DESC', 'RPT_DT', 'STATION_NAME', 'SUSP_AGE_GROUP', 'SUSP_RACE', 'SUSP_SEX', 'TRANSIT_DISTRICT', 'VIC_AGE_GROUP', 'VIC_RACE', 'VIC_SEX', 'X_COORD_CD', 'Y_COORD_CD', 'Latitude', 'Longitude', 'Lat_Lon', 'New Georeferenced Column')
+Description = c('Randomly generated persistent ID for each complaint', 'The precinct in which the incident occurred', 'The name of the borough in which the incident occurred', 'Exact date of occurrence for the reported event (or starting date of occurrence, if CMPLNT_TO_DT exists)', 'Exact time of occurrence for the reported event (or starting time of occurrence, if CMPLNT_TO_TM exists)', 'Ending date of occurrence for the reported event, if exact time of occurrence is unknown', 'Ending time of occurrence for the reported event, if exact time of occurrence is unknown', 'Indicator of whether crime was successfully completed or attempted, but failed or was interrupted prematurely', 'Name of NYCHA housing development of occurrence, if applicable', 'Development Level Code', 'Jurisdiction responsible for incident. Either internal, like Police(0), Transit(1), and Housing(2); or external(3), like Correction, Port Authority, etc.', 'Description of the jurisdiction code', 'Three digit offense classification code', 'Level of offense: felony, misdemeanor, violation', 'Specific location of occurrence in or around the premises; inside, opposite of, front of, rear of', 'Description of offense corresponding with key code', 'Name of NYC park, playground or greenspace of occurrence, if applicable (state parks are not included)', 'The name of the patrol borough in which the incident occurred', 'Three digit internal classification code (more granular than Key Code)', 'Description of internal classification corresponding with PD code (more granular than Offense Description)', 'Specific description of premises; grocery store, residence, street, etc.', 'Date event was reported to police', 'Transit station name', 'Suspect’s Age Group', 'Suspect’s Race Description', 'Suspect’s Sex Description', 'Transit district in which the offense occurred.', 'Victim’s Age Group', 'Victim’s Race Description', 'Victim’s Sex Description', 'X-coordinate for New York State Plane Coordinate System, Long Island Zone, NAD 83, units feet (FIPS 3104)', 'Y-coordinate for New York State Plane Coordinate System, Long Island Zone, NAD 83, units feet (FIPS 3104)', 'Midblock Latitude coordinate for Global Coordinate System, WGS 1984, decimal degrees (EPSG 4326)', 'Midblock Longitude coordinate for Global Coordinate System, WGS 1984, decimal degrees (EPSG 4326)', '', '')
+t <- data.frame(Colname, Description)
+t1 <- as.data.frame(list(Colname = toupper(colnames(df)), Class = sapply(df, class)), row.names = NULL)
+t$colname <- toupper(t$Colname)
+t2<-merge(t1, t) %>% 
+  select(1,3,2) %>% add_row(Colname = "Geocoded_Column.type", Description = 'Type of the geographical location', 
+                           Class = "factor")
+knitr::kable(t2)
+```
+
+
+
+## Missing value analysis
+```{r missing value analysis}
+library(dplyr)
+library(stringr)
+library(plotly)
+
+# replace null values to NA 
+df <- df %>% mutate_all(funs(str_replace(., "(null)", "NA")))
+df[df == "(NA)"] <- NA
+is.na(df$hadevelopt[1])
+
+# create data frame for NA and Unknown values in each variable of dataset 
+variables <- c(colnames(df))
+na_nums <- c(1:35)
+unknown_nums <- c(1:35)
+for (i in 1:ncol(df)) {
+  na_count <- sum(is.na(df[,i]))
+  na_nums[i] <- na_count
+  unknown_count <- sum(str_detect(na.omit(df[,i]), "UNKNOWN"))
+  unknown_nums[i] <- unknown_count
+}
+
+na_values_stat <- data.frame(variables, na_nums, unknown_nums)
+
+# show exact number of na values and unknown values in each variable
+View(na_values_stat)
+
+# present graph of na_values_stat
+na_values_fig <- plot_ly(na_values_stat, x = ~na_nums, y = ~variables, type = 'bar',
+                         orientation = 'h', marker = list(color = 'cadeblue2'))
+na_values_fig <- na_values_fig %>% layout(
+  title = 'Bar chart of number of NA values in each variable from dataset',
+  legend = list(x = 0, y = 0, font = list(size = 10)),
+  margin = list(l = 100, r = 20, t = 70, b = 70)
+)
+na_values_fig
+
+unknown_values_fig <- plot_ly(na_values_stat, x = ~unknown_nums, y = ~variables, type = 'bar',
+                         orientation = 'h', marker = list(color = 'cadeblue2'))
+unknown_values_fig <- unknown_values_fig %>% layout(
+  title = 'Bar chart of number of Unknown values in each variable from dataset',
+  legend = list(x = 0, y = 0, font = list(size = 10)),
+  margin = list(l = 100, r = 20, t = 70, b = 70)
+)
+unknown_values_fig
+
+```
+
+Based on two horizontal bar charts above that show the total number of NA values as well as Unknown values in each variable from dataset, we can see several apparent features in missing values:
+1. In bar chart of number of NA values, variable **TRANSIT_DISTRICT** and **STATION_NAME** are highly associated because they represent transit district in which the offense occurred and transit police station name respectively. Since each of these two variables has more than 300k NA values, which is more than 92% of total observations in dataset, and we only focus on where did a crime occur, we can drop these two variables in our result analysis part.
+
+2. In bar chart of number of NA values, variable **PARKS_NM, HOUSING_PSA, HADEVELOP** have a positive correlation. This means if an observation has NA value in one of these three variables, then there is high probability that such observation will have NA values in other two variables. Since each of these three variables has more than 300k NA values and they are not related to our research questions, we will remove them in result analysis part.
+
+3. In bar chart of number of NA values, variable **LOC_OF_OCCUR_DESC** 
+
+
+
+
+<!--chapter:end:data.Rmd-->
+
+```{r include=FALSE, cache=FALSE}
+knitr::opts_chunk$set(
+  echo = FALSE,
+  message = FALSE,
+  warning = FALSE
+)
+```
+# Results
+
+<!--chapter:end:results.Rmd-->
+
+```{r include=FALSE, cache=FALSE}
+knitr::opts_chunk$set(
+  echo = FALSE,
+  message = FALSE,
+  warning = FALSE
+)
+```
+# Interactive component
+
+
+
+<!--chapter:end:interactive.Rmd-->
+
+```{r include=FALSE, cache=FALSE}
+knitr::opts_chunk$set(
+  echo = FALSE,
+  message = FALSE,
+  warning = FALSE
+)
+```
+# Conclusion
+
+
+<!--chapter:end:conclusion.Rmd-->
+
