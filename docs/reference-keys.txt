@@ -8,5 +8,8 @@ sources
 cleaning-transformation
 missing-value-analysis
 results
+time-series-analysis
+occurence-analysis
+law-category-analysis
 interactive-component
 conclusion
