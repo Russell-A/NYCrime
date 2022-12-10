@@ -13,7 +13,7 @@ df$cmplnt_fr_dt <- as.Date(df$cmplnt_fr_dt)
 df_ts <- df %>% mutate(year_occur = year(df$cmplnt_fr_dt), month_occur = month(df$cmplnt_fr_dt))
 df_y_occur <- as.data.frame(table(df_ts$year_occur), col.names<- names(c("Year", "Freq")) )
 num2021 <- sum(df_y_occur$Freq[1:22])
-df_temp <- as.data.frame(matrix(c("<2021", "2022", num2021, df_y_occur$Freq[23]),nrow = 2))
+df_temp <- as.data.frame(matrix(c("<2022", "2022", num2021, df_y_occur$Freq[23]),nrow = 2))
 colnames(df_temp) <- c("Year", "Count")
 knitr::kable(df_temp)
 ```
