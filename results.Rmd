@@ -31,7 +31,6 @@ We can see from the above plot that the number of crimes in 2022 from January to
 df_ts_22 <- df_ts_22 %>%mutate(hms = as.POSIXct(cmplnt_fr_tm, format = "%H:%M:%OS"))
 df_ts_22 <- df_ts_22 %>%mutate(hour = hour(hms))
 df_occur_hour_count <- as.data.frame(table(df_ts_22$hour))
-df_occur_hour_count
 ggplot(df_occur_hour_count, mapping = aes(x = Var1, y = Freq, group=1))+geom_line() +geom_point()+xlab("Hour") + ylab("Occurance") + ggtitle("Occurence of crime at different times of the day in 2022")
 ```
 
