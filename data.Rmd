@@ -6,6 +6,8 @@ As discussed in 2.2, data is downloaded from https://data.cityofnewyork.us/Publi
 
 ## Cleaning / transformation
 ```{r cleaning and transformation}
+library(tidyverse)
+
 ## transform data type
 df$addr_pct_cd <- as.numeric(df$addr_pct_cd)
 df$cmplnt_fr_dt <- as.Date(df$cmplnt_fr_dt)
@@ -129,6 +131,7 @@ unknown_values_fig
 ```
 
 Based on two horizontal bar charts above that show the total number of NA values as well as Unknown values in each variable from dataset, we can see several apparent features in missing values:
+
 1. In bar chart of number of NA values, variable **TRANSIT_DISTRICT** and **STATION_NAME** are positively associated because they represent transit district in which the offense occurred and transit police station name respectively. Since each of these two variables has more than 300k NA values, which is more than 92% of total observations in dataset, and we only focus on where did a crime occur, we can drop these two variables in our result analysis part.Similarly, variable **PARKS_NM, HOUSING_PSA, HADEVELOP** have a positive correlation. This means if an observation has NA value in one of these three variables, then there is high probability that such observation will have NA values in other two variables. Since each of these three variables has more than 300k NA values and they are not related to our research questions, we will remove these variables in result analysis part.
 
 2. In bar chart of number of NA values, variable **SUSP_SEX, SUSP_RACE, SUSP_AGE_GROUP** have same number of NA values of 73511, so they are having a positive correlation = 1. This means if an observation has NA value in one of these three variables, then this observation record will have NA values in other two variables. Since we only focus on victims attributes in our research questions, we will remove these three variables in result analysis. Similarly, variable **CMPLNT_TO_TM, CMPLNT_TO_DT** have same number of NA values of 29262. They have a positive correlation = 1. Since we are only focus on occurred date of crimes, we will not select these 2 variables in our result analysis. 
