@@ -1,0 +1,42 @@
+---
+title: "create_csvdata"
+date: "2022-12-06"
+---
+
+```{r}
+library(jsonlite)
+library(tidyverse)
+library(dplyr)
+library(plyr)
+library(hash)
+
+load('./df_10y.rda')
+```
+
+## Summarize and concatenate data
+
+```{r}
+
+# calculate the total number of crime incidences by precinct
+num_precinct <- df_10y %>% count("addr_pct_cd")
+num_precinct$ofns_desc_group <- c(rep("All",nrow(num_precinct)))
+
+num_type_precinct <- df_10y %>% count(c("addr_pct_cd", "ofns_desc_group"))
+
+# concatenate two data frame 
+num_crime <- rbind(num_type_precinct, num_precinct) %>% 
+  pivot_wider(names_from = "ofns_desc_group",
+              values_from = "freq")
+num_crime$addr_pct_cd <- as.numeric(num_crime$addr_pct_cd)
+num_crime[is.na(num_crime)] <- 0
+
+
+```
+
+## Write csv file
+
+
+```{r}
+write.csv(x = num_crime, file = "num_crime.csv")
+
+```
