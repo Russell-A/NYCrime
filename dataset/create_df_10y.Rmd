@@ -1,0 +1,71 @@
++---
+title: "create_json_data"
+---
+
+```{r}
+library(tidyverse)
+library(dplyr)
+library(plyr)
+
+load('./rawdata.Rda')
+```
+
+## Ceate a dataset for geographic visualization
+
+First, we narrow down the period of dataset into the last 10 years because too old data seems not to be helpful to understand the recent information.
+Next, We remove some redundant rows and create additional columns so that we can analyze more deeply.
+we remove "UNKNOWN" data in "vic_race", "vic_sex" and "vic_age_group"; we summarize "ofns_desc_group" since the classification is in detail too much. 
+
+```{r}
+# data in the last 10 years (2013-2022)
+df <- mutate(df, lat=latitude, lon=longitude)
+df_10y <- filter(df, cmplnt_fr_dt >= "2013-01-01")
+  
+# data preparation
+df_10y$lat <- as.numeric(df_10y$lat)
+df_10y$lon <- as.numeric(df_10y$lon)
+
+# remove UNKNOWN data
+df_10y <- df_10y[(df_10y[, "vic_race"]!="UNKNOWN") & (df_10y[, "vic_race"]!="(null)"), ]
+df_10y <- df_10y[(df_10y[, "vic_sex"]=="M") | (df_10y[, "vic_sex"]=="F"), ] 
+df_10y <- df_10y[df_10y[, "vic_age_group"]!="UNKNOWN", ]
+df_10y <- df_10y %>%
+  mutate(vic_race_group = case_when(vic_race == "AMERICAN INDIAN/ALASKAN NATIVE" | vic_race == "BLACK HISPANIC" ~ "OTHERS",
+                                      TRUE ~ vic_race
+                                      )
+          ) %>%
+    mutate("vic_age_18_24" = factor(ifelse(vic_age_group == "18-24", "18-24", "Others"))) %>%
+    mutate(ofns_desc_group = factor(case_when(ky_cd == "101" ~ "MURDER",
+                                         ky_cd == "104" | ky_cd == "115" | ky_cd == "116" | ky_cd == "233"　~ "SEXUALCRIME",
+                                         ky_cd == "105" | ky_cd == "107" | ky_cd == "109" | ky_cd == "110" | ky_cd == "232" | 
+                                           ky_cd == "341" | ky_cd == "343" ~ "ROBBERY",
+                                         ky_cd == "106" | ky_cd == "343" | ky_cd == "344" | ky_cd == "355" | ky_cd == "358" | 
+                                           ky_cd == "359" | ky_cd == "361" ~ "ASSAULT",
+                                         ky_cd == "112" | ky_cd == "340" ~ "FRAUD",
+                                         ky_cd == "578" ~ "HARRASSMENT",
+                                         TRUE ~ "OTHERS"
+                                        )
+                                    )
+           ) %>%
+    mutate("sexual_crime" = factor(ifelse(ofns_desc_group == "SEXUALCRIME", "SEXUALCRIME", "OTHERS")))　%>%
+    mutate("columbia" = factor(ifelse(abs(lon+73.96)<0.01 & abs(lat-40.81)<0.01, "Columbia_Area", "Others"))) %>%
+    mutate("occ_hour" = substr(cmplnt_fr_tm, 1, 2)) 
+
+df_10y$occ_hour <- as.integer(df_10y$occ_hour)
+df_10y <- df_10y %>% 
+  mutate("occ_hour_group" = factor(case_when(occ_hour >= 6 & occ_hour <= 11 ~ "morning",
+                                              occ_hour >= 12 & occ_hour <= 17 ~ "afternoon",
+                                              occ_hour >= 18 ~ "evening",
+                                              occ_hour <= 5 ~ "midnight"
+                                            )
+  )
+                                   
+  )
+
+```
+
+## Write and save the new dataset
+
+```{r}
+save(df_10y, file = "df_10y.rda")
+```
