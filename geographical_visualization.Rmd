@@ -21,7 +21,7 @@ library(forcats)
 library(ggmosaic)
 
 
-register_google(key='AIzaSyDMi8CMFkX1AP6wIkqOsoIlNzhzSydkz_Y')
+register_google(key='')
 
 load('/Users/yuta/Documents/GitHub/NYCrime/dataset/rawdata.Rda')
 ```
