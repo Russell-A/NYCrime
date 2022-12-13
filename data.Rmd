@@ -91,7 +91,7 @@ library(plotly)
 # replace null values to NA 
 df <- df %>% mutate_all(funs(str_replace(., "(null)", "NA")))
 df[df == "(NA)"] <- NA
-is.na(df$hadevelopt[1])
+# is.na(df$hadevelopt[1])
 
 # create data frame for NA and Unknown values in each variable of dataset 
 variables <- c(colnames(df))
@@ -138,10 +138,19 @@ Based on two horizontal bar charts above that show the total number of NA values
 
 3. In bar chart of number of NA values, there are **ADDR_PCT_CD, BORO_NM, OFNS_DESC, PATROL_BORO, PD_CD, PD_DESC, PREM_TYP_DESC, VIC_RACE, X_COORD_CD, Y_COORD_CD, Geocoded_Column.type** variables having NA values that are less than 1k. We will directly delete observations with NA values in these variables in our result analysis since total number of such observations only occupy approximately 0.5% of all data.
 
-4. In bar chart of number of Unknown values, variable **VIC_RACE** and **VIC_AGE_GROUP** have a strong positive correlation. **VIC_RACE** has 119.927k Unknown values while **VIC_AGE_GROUP** has 111.822k Unknown values, both of them occupy more than 28% of total observations. We will delete observations with Unknown values in making graphs of victim race and victim age group distribution over different areas of NYC. However, since there is a moderate portion of Unknown values in these two variables and we need to show that remaining data is not biased, we will make a bar chart to show distribution of observations with Unknown values in **VIC_RACE** and **VIC_AGE_GROUP** over boroughs of NYC.
+4. In bar chart of number of Unknown values, variable **VIC_RACE** and **VIC_AGE_GROUP** have a strong positive correlation. **VIC_RACE** has 119.927k Unknown values while **VIC_AGE_GROUP** has 111.822k Unknown values, both of them occupy more than 28% of total observations. We will delete observations with Unknown values in making graphs of victim race and victim age group distribution over different areas of NYC. However, since there is a moderate portion of Unknown values in these two variables and we need to show that remaining data is not biased, we will make two tables to show distribution of observations with Unknown values in **VIC_RACE** and **VIC_AGE_GROUP** over boroughs of NYC.
 
 5. In bar chart of number of Unknown values, variable **SUSP_RACE, SUSP_AGE_GROUP** have a strong positive correlation. Since each of these two variables has more than 99k Unknown values and we only focus on victims attributes in our research questions, we will remove these three variables in result analysis.
 
 6. In bar chart of number of Unknown values, variable **PD_DESC** has 1221 Unknown values. Since this just occupy less than 0.5% of total data, we will directly remove observations with Unknown values in **PD_DESC** in our result analysis.
 
+```{r}
+# table of distribution of unknown values in victim race over boroughs
+table(df$boro_nm, df$vic_race == "UNKNOWN")
 
+# table of distribution of unknown values in victim age group over boroughs
+table(df$boro_nm, df$vic_age_group == "UNKNOWN")
+
+```
+
+According to these two tables, we can see that Manhattan borough has the most Unknown values while Staten Island borough has the least Unknown values in variable **VIC_RACE** and **VIC_AGE_GROUP**. Unknown values approximately have uniform distribution in other three variables. Therefore, the removal of all observations with Unknown values in **VIC_RACE** and **VIC_AGE_GROUP** will reduce the density of each type of victim race and victim age group in Manhattan and increase the density of them in Staten Island. This limitation will slightly reduce the overall accuracy of our graph.
