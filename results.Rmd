@@ -50,8 +50,8 @@ This plot shows the frequency of crimes at difference times of the day in 2022. 
 ### Law Category Analysis
 
 ```{r Occurence_law_2022, message=FALSE, fig.width=10}
-
-df_law_22 <- df_ts_22 %>% group_by(law_cat_cd, cmplnt_fr_dt) %>% summarise(n = n()) %>% ungroup()
+library(dplyr)
+df_law_22 <- df_ts_22 %>% group_by(law_cat_cd, cmplnt_fr_dt) %>% dplyr::summarise(n = n()) %>% ungroup()
 colnames(df_law_22) <- c( "Law Category", "Date", "n")
 p <- ggplot(df_law_22, mapping = aes(x = Date, y = n, group = `Law Category`, color = `Law Category`))  + geom_line() +geom_point()+labs(x = "Date", y = "Frequency", title = "Frequency of Crime in Different Law Categories in 2022", color = "Law Category")
 ggplotly(p)
@@ -60,7 +60,7 @@ ggplotly(p)
 The plot shows the frequency of crimes falling in different law categories in 2022. We can see from the plot the frequency in decreasing number is misdemeanor, felony and violation. They all experience an increase and decrease in trend of occurrence in 2022. Moreover, frequency of misdemeanor has the highest variance while the frequency of violation is the most stable among the frequencies of these three kinds of crimes.
 
 ```{r Occurence_law_hour_2022, message=FALSE, fig.width=10}
-df_law_22 <- df_ts_22 %>% group_by(law_cat_cd, hour) %>% summarise(n = n())
+df_law_22 <- df_ts_22 %>% group_by(law_cat_cd, hour) %>% dplyr::summarise(n = n())
 df_law_22$hour <- as.factor(df_law_22$hour)
 colnames(df_law_22) <- c("Law Category", "Hour", "n")
  p <- ggplot(df_law_22, mapping = aes(x = Hour, y = n, group = `Law Category`, color = `Law Category`)) + geom_line()+geom_point() +labs(x = "Hour", y = "Frequency", title = "Frequency of Crimes in Different Law Categories in Different Time of a Day in 2022", color = "Law Category")
@@ -84,39 +84,55 @@ load('./dataset/df_10y.rda')
 To create and discuss geographic visualization, we use the crime data only for the recent 10 years, that is, between 2013 and 2022, because we are interested in the current crime situation in the NYC and the situation might change dramatically if a few decades have passed.
 
 
-```{r}
+```{r, fig.width=7, fig.height=8}
 map <- get_map(location=c(lon=-73.92, lat=40.80),
                maptype='roadmap',
                zoom=11
                )
   
 ggmap(map) + 
-  geom_density_2d_filled(data=df_10y, aes(x=lon, y=lat, alpha=.5), contour = FALSE) +
-  facet_wrap(vars(vic_race)) + 
-  ggtitle('Density Map for Crime Occurrence by Victim Race') 
+  geom_density_2d_filled(data=df_10y, aes(x=lon, y=lat, alpha=.5), contour = FALSE, contour_var= "ndensity") +
+  facet_wrap(vars(vic_race),ncol=2) + 
+  ggtitle('Density Map for Crime Occurrence by Victim Race') +
+  theme(axis.ticks = element_blank(), 
+        axis.text = element_blank(),  
+        axis.title = element_blank(), 
+        axis.line = element_blank()) +
+  labs(fill = "Density Level")
+```
 
+For the geographic analysis, we created 2D density maps, in which the frequency of crimes at every place in the NYC can be described by calculating the number of crime by each coordinate. Each map has a label of density level letting the maximum value be 1. We chose the opacity (denoted as "alpha") of the density map to 0.5 so that we can see the background map.
+
+
+```{r, fig.width=8, fig.height=15}
 ggmap(map) + 
-  geom_density_2d_filled(data=df_10y, aes(x=lon, y=lat, alpha=.5), contour = FALSE) +
-  facet_grid(rows=vars(vic_sex), cols=vars(vic_age_group)) + 
+  geom_density_2d_filled(data=df_10y, aes(x=lon, y=lat, alpha=.5), contour = FALSE, contour_var= "ndensity") +
+  facet_grid(rows=vars(vic_age_group), cols=vars(vic_sex)) + 
   ggtitle('Density Map for Crime Occurrence by Victim Gender and Age') +
   theme(axis.ticks = element_blank(), 
         axis.text = element_blank(),  
         axis.title = element_blank(), 
-        axis.line = element_blank()) 
+        axis.line = element_blank()) +
+  labs(fill = "Density Level")
+```
 
 
+Maps above show that the areas where crimes were likely to occur varied according to the victim's characteristics such as age, sex and race. Specifically, crimes against Asian people tended to occur near Flushing as well as Midtown Manhattan, which is probably because there is a big China town in Flushing and thus many Asian people visit there, while Black Hispanic people was likely to get involved in a crime in Bronx. In terms of victim's gender and age, many young (less than 18) female and male victims in Bronx might draw your attention in particular. We presume that this is because assault and sexual crimes occurred more frequently in Bronx than in other borough (it is explained by an interactive visualization next chapter), and also because teenagers were more likely to suffered from those types of crimes, as the mosaic plot below shows.
+
+
+```{r, fig.width=8, fig.height=6}
 ggplot(df_10y) + 
   geom_mosaic(aes(x=product(ofns_desc_group, vic_age_group), fill=ofns_desc_group), 
               divider = c("vspine", "hspine") )+
   facet_grid(cols=vars(vic_sex)) + 
   theme(axis.text.x = element_text(angle=60, vjust=1, hjust=1)) +
   xlab('Victim Gender x Age') + ylab('Crime Type') +
-  ggtitle('Mosaic Plot of Crime Type by Victim Gender and Age') 
+  ggtitle('Mosaic Plot of Crime Type by Victim Gender and Age') +
+  labs(fill = "Crime Type")
 
 
 ```
 
-Maps above show that the areas where crimes were likely to occur varied according to the victim's characteristics such as age, sex and race. Specifically, crimes against Asian people tended to occur near Flushing as well as Midtown Manhattan, which is probably because there is a big China town in Flushing and thus many Asian people visit there, while Black Hispanic people was likely to get involved in a crime in Bronx. In terms of victim's gender and age, many young (less than 18) female and male victims in Bronx might draw your attention in particular. We presume that this is because assault and sexual crimes occurred more frequently in Bronx than in other borough (it is explained by an interactive visualization next chapter), and also because teenagers were more likely to suffered from those types of crimes, as the mosaic plot above shows.
 
 This mosaic plot also tells us that the older a victim was, the more likely he/she got involved in a robbery or theft, which we can intuitively understand the reason since the older people cannot move fast and thus will tend to be targeted by thieves. Besides, we can see from this plot that elderly people will be more easily deceived, resulting in the higher proportion of fraud incidents than yonger age groups.
 
@@ -125,20 +141,27 @@ Although we can find a bunch of findings from these visualization, according to 
 ### Analysis for the area near Columbia University 
 
 ```{r}
-manhattan <- get_map(location=c(lon=-73.93, lat=40.79),
-               maptype='roadmap',
-               zoom=12
-               )
-
 columbia <- get_map(location=c(lon=-73.963, lat=40.808),
                maptype='roadmap',
                zoom=15
                )
 
 ggmap(columbia) + 
-  geom_density_2d_filled(data=df_10y, aes(x=lon, y=lat, alpha=.5)) +
-  ggtitle('Density Map for Crime Occurrence near Columbia Univeristy')
+  geom_density_2d_filled(data=df_10y, aes(x=lon, y=lat, alpha=.5), contour = FALSE, contour_var= "ndensity") +
+  ggtitle('Density Map for Crime Occurrence near Columbia Univeristy') +
+  labs(fill = "Density Level")  +
+  theme(axis.ticks = element_blank(), 
+        axis.text = element_blank(),  
+        axis.title = element_blank(), 
+        axis.line = element_blank())
+```
 
+We zoomed in on the map and created a heat map again so that we can find where is dangerous near our campus.
+As a result, more crimes seems to occur in the area more than 3 blocks away from the campus than just around the corner. In particular, we should be careful if we go around the 125th street Amsterdam Avenue and in the east side of Morningside Park.
+
+
+
+```{r, fig.width=8, fig.height=8}
 # limit the dataset to only crimes near Columbia campus
 # the area of abs(lat-40.81)<0.01 & abs(lon+73.96)<0.01 
 df_columbia <- df_10y[df_10y[, "columbia"]=="Columbia_Area", ]
@@ -149,13 +172,12 @@ ggplot(df_columbia) +
   facet_grid(rows=vars(vic_age_18_24)) +
   theme(axis.text.x = element_text(angle=60, vjust=1, hjust=1)) +
   xlab('Victim Gender x Time Incident Occurred') + ylab('Victim Age x Crime Type') +
-  ggtitle('Mosaic Plot of Crime Type by Victim Gender, Age and Time') 
+  ggtitle('Mosaic Plot of Crime Type by Victim Gender, Age and Time') +
+  labs(fill = "Crime Type")
 
 
 ```
 
-We zoomed in on the map and created a heat map again so that we can find where is dangerous near our campus.
-As a result, more crimes seems to occur in the area more than 3 blocks away from the campus than just around the corner. In particular, we should be careful if we go around the 125th street Amsterdam Avenue and in the east side of Morningside Park.
 
 Next, we filtered the dataset into only crimes occurred near Columbia campus, and created a mosaic plot. This graph provides us with the information that the 18-24 year-old group, most of whom might be students, was suffer from robbery and theft the most frequently all day long. Although the percentage of each type of crime is almost the same between female and male of the 18-24 group, it seems that the proportion of assault incidents for female groups is slightly higher than male groups. Moreover, since we can find that the female 18-24 group has much higher proportion of sexual crime than other groups (even the "others" female group), especially midnight (12AM-6AM), they should not walk outside alone late at night.
 
