@@ -15,5 +15,6 @@ geographic-analysis
 borough-analysis
 analysis-for-whole-area-of-nyc
 analysis-for-the-area-near-columbia-university
+analysis-for-relation-between-victim-and-crime-type
 interactive-component
 conclusion
