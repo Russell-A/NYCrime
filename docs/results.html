@@ -6,7 +6,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <title>Chapter 4 Results | NYC crimes</title>
   <meta name="description" content="Chapter 4 Results | NYC crimes" />
-  <meta name="generator" content="bookdown 0.29 and GitBook 2.6.7" />
+  <meta name="generator" content="bookdown 0.30 and GitBook 2.6.7" />
 
   <meta property="og:title" content="Chapter 4 Results | NYC crimes" />
   <meta property="og:type" content="book" />
@@ -99,6 +99,12 @@
 <li class="chapter" data-level="4.1.1" data-path="results.html"><a href="results.html#occurence-analysis"><i class="fa fa-check"></i><b>4.1.1</b> Occurence Analysis</a></li>
 <li class="chapter" data-level="4.1.2" data-path="results.html"><a href="results.html#law-category-analysis"><i class="fa fa-check"></i><b>4.1.2</b> Law Category Analysis</a></li>
 </ul></li>
+<li class="chapter" data-level="4.2" data-path="results.html"><a href="results.html#geographic-analysis"><i class="fa fa-check"></i><b>4.2</b> Geographic Analysis</a>
+<ul>
+<li class="chapter" data-level="4.2.1" data-path="results.html"><a href="results.html#analysis-for-whole-area-of-nyc"><i class="fa fa-check"></i><b>4.2.1</b> Analysis for whole area of NYC</a></li>
+<li class="chapter" data-level="4.2.2" data-path="results.html"><a href="results.html#analysis-for-the-area-near-columbia-university"><i class="fa fa-check"></i><b>4.2.2</b> Analysis for the area near Columbia University</a></li>
+</ul></li>
+<li class="chapter" data-level="4.3" data-path="results.html"><a href="results.html#analysis-for-relation-between-victim-and-crime-type"><i class="fa fa-check"></i><b>4.3</b> Analysis for relation between Victim and Crime Type</a></li>
 </ul></li>
 <li class="chapter" data-level="5" data-path="interactive-component.html"><a href="interactive-component.html"><i class="fa fa-check"></i><b>5</b> Interactive component</a></li>
 <li class="chapter" data-level="6" data-path="conclusion.html"><a href="conclusion.html"><i class="fa fa-check"></i><b>6</b> Conclusion</a></li>
@@ -149,7 +155,7 @@
 <p><img src="finalproj_files/figure-html/Occurence_2022-1.png" width="672" /></p>
 <p>We can see from the above plot that the number of crimes in 2022 from January to October goes gradually up then down. It indicates that the number of crimes may have a positive correlation to the temperature. When weather is warmer, there tends to be more crimes.</p>
 <p><img src="finalproj_files/figure-html/Occurence_time_2022-1.png" width="672" /></p>
-<p>This plot shos the occurrence of crime at difference times of the day in 2022. The occurrence of crime reaches to its lowest in the morning then gradually goes up. It reaches its peak at 3-5 p.m. then goes down. It’s against to our intuitation that most crime occurs at night. In fact, most of the crime occurs in the daytime, especially in the afternoon.</p>
+<p>This plot shows the occurrence of crime at difference times of the day in 2022. The occurrence of crime reaches to its lowest in the morning then gradually goes up. It reaches its peak at 3-5 p.m. then goes down. It’s against to our intuitation that most crime occurs at night. In fact, most of the crime occurs in the daytime, especially in the afternoon.</p>
 </div>
 <div id="law-category-analysis" class="section level3 hasAnchor" number="4.1.2">
 <h3><span class="header-section-number">4.1.2</span> Law Category Analysis<a href="results.html#law-category-analysis" class="anchor-section" aria-label="Anchor link to header"></a></h3>
@@ -157,8 +163,31 @@
 <p>The plot shows the occurrence of crime falling in different law categories in 2022. We can see from the plot the occurrence in decreasing number is misdemeanor, felony and violation. They all experience an increase and decrease in trend of occurrence in 2022. Moreover, occurrence of misdemeanor has the highest variance while the occurrence of violation is the most stable among the occurrences of these three kinds of crimes.</p>
 <p><img src="finalproj_files/figure-html/Occurence_law_hour_2022-1.png" width="672" /></p>
 <p>The above graph shows the crimes of all three categories reaches their lowest points at 5-6 a.m.. And they reaches their highest points at 3-5 p.m.. We can also see from the plot that in the night, there is another peak for felony and the rate of felony in all categories of crimes goes up. It’s to our intuition that the felony often occur at midnight.</p>
-
 </div>
+</div>
+<div id="geographic-analysis" class="section level2 hasAnchor" number="4.2">
+<h2><span class="header-section-number">4.2</span> Geographic Analysis<a href="results.html#geographic-analysis" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div id="analysis-for-whole-area-of-nyc" class="section level3 hasAnchor" number="4.2.1">
+<h3><span class="header-section-number">4.2.1</span> Analysis for whole area of NYC<a href="results.html#analysis-for-whole-area-of-nyc" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>To create and discuss geographic visualization, we use the crime data only for the recent 10 years, that is, between 2013 and 2022, because we are interested in the current crime situation in the NYC and the situation might change dramatically if a few decades have passed.</p>
+<p><img src="finalproj_files/figure-html/unnamed-chunk-7-1.png" width="672" /><img src="finalproj_files/figure-html/unnamed-chunk-7-2.png" width="672" /></p>
+<p>Maps above show that the areas where crimes were likely to occur varied according to the victim’s characteristics such as age, sex and race. Specifically, crimes against Asian people tended to occur near Flushing as well as Midtown Manhattan, which is probably because there is a big China town in Flushing and thus many Asian people visit there, while Black Hispanic people was likely to get involved in a crime in Bronx. In terms of victim’s gender and age, many young (less than 18) female and male victims in Bronx might draw your attention in particular. We presume that this is because assault and sexual crimes occurred more frequently in Bronx than in other borough (it is explained by an interactive visualization next chapter), and also because teenagers were more likely to suffered from those types of crimes, as the mosaic plot above shows.</p>
+<p>Although we can find a bunch of findings from these visualization, according to our objective and interest, we focus on the data near the campus of Columbia University and try to find some findings.</p>
+</div>
+<div id="analysis-for-the-area-near-columbia-university" class="section level3 hasAnchor" number="4.2.2">
+<h3><span class="header-section-number">4.2.2</span> Analysis for the area near Columbia University<a href="results.html#analysis-for-the-area-near-columbia-university" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p><img src="finalproj_files/figure-html/unnamed-chunk-8-1.png" width="672" /><img src="finalproj_files/figure-html/unnamed-chunk-8-2.png" width="672" /></p>
+<p>We zoomed in on the map and created a heat map again so that we can find where is dangerous near our campus.
+As a result, more crimes seems to occur in the area more than 3 blocks away from the campus than just around the corner. In particular, we should be careful if we go around the 125th street Amsterdam Avenue and in the east side of Morningside Park.</p>
+<p>Next, we filtered the dataset into only crimes occurred near Columbia campus, and created a mosaic plot. This graph provides us with the information that the 18-24 year-old group, most of whom might be students, was suffer from robbery and theft the most frequently all day long. Although the percentage of each type of crime is almost the same between female and male of the 18-24 group, it seems that the proportion of assault incidents for female groups is slightly higher than male groups. Moreover, since we can find that the female 18-24 group has much higher proportion of sexual crime than other groups (even the “others” female group), especially midnight (12AM-6AM), they should not walk outside alone late at night.</p>
+</div>
+</div>
+<div id="analysis-for-relation-between-victim-and-crime-type" class="section level2 hasAnchor" number="4.3">
+<h2><span class="header-section-number">4.3</span> Analysis for relation between Victim and Crime Type<a href="results.html#analysis-for-relation-between-victim-and-crime-type" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p><img src="finalproj_files/figure-html/victim%20&%20suspect%20corrspond%20to%20crime%20type-1.png" width="672" /></p>
+<p>In order to figure out what type of crime that a person in NYC is most likely to encounter, we divided all crime records into 7 types of crimes based on their descriptions: Murder, Assault, Robbery, Sexual Crime, Fraud, Harassment and Others.</p>
+<p>According to this mosaic plot, we can find that Robbery and Assault are two most frequent crime types occur in general that a person could encounter in NYC. It also tells us many representative characteristics based on classification of victims. For example, for any race and gender, the older a victim was, the more likely he/she got involved in a robbery or theft, which we can intuitively understand the reason since the older people cannot move fast and thus will tend to be targeted by thieves. Besides, we can see from this plot that elderly people will be more easily deceived, resulting in the higher proportion of fraud incidents than younger age groups. In addition, females under 18 might have higher probability to become victims of Sexual Crime than other groups. White and Aisan / Pacific Islanders race have higher probability to encounter Robbery crimes than other race groups.</p>
+
 </div>
 </div>
             </section>

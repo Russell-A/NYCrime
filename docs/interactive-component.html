@@ -6,7 +6,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <title>Chapter 5 Interactive component | NYC crimes</title>
   <meta name="description" content="Chapter 5 Interactive component | NYC crimes" />
-  <meta name="generator" content="bookdown 0.29 and GitBook 2.6.7" />
+  <meta name="generator" content="bookdown 0.30 and GitBook 2.6.7" />
 
   <meta property="og:title" content="Chapter 5 Interactive component | NYC crimes" />
   <meta property="og:type" content="book" />
@@ -99,6 +99,12 @@
 <li class="chapter" data-level="4.1.1" data-path="results.html"><a href="results.html#occurence-analysis"><i class="fa fa-check"></i><b>4.1.1</b> Occurence Analysis</a></li>
 <li class="chapter" data-level="4.1.2" data-path="results.html"><a href="results.html#law-category-analysis"><i class="fa fa-check"></i><b>4.1.2</b> Law Category Analysis</a></li>
 </ul></li>
+<li class="chapter" data-level="4.2" data-path="results.html"><a href="results.html#geographic-analysis"><i class="fa fa-check"></i><b>4.2</b> Geographic Analysis</a>
+<ul>
+<li class="chapter" data-level="4.2.1" data-path="results.html"><a href="results.html#analysis-for-whole-area-of-nyc"><i class="fa fa-check"></i><b>4.2.1</b> Analysis for whole area of NYC</a></li>
+<li class="chapter" data-level="4.2.2" data-path="results.html"><a href="results.html#analysis-for-the-area-near-columbia-university"><i class="fa fa-check"></i><b>4.2.2</b> Analysis for the area near Columbia University</a></li>
+</ul></li>
+<li class="chapter" data-level="4.3" data-path="results.html"><a href="results.html#analysis-for-relation-between-victim-and-crime-type"><i class="fa fa-check"></i><b>4.3</b> Analysis for relation between Victim and Crime Type</a></li>
 </ul></li>
 <li class="chapter" data-level="5" data-path="interactive-component.html"><a href="interactive-component.html"><i class="fa fa-check"></i><b>5</b> Interactive component</a></li>
 <li class="chapter" data-level="6" data-path="conclusion.html"><a href="conclusion.html"><i class="fa fa-check"></i><b>6</b> Conclusion</a></li>
@@ -126,13 +132,15 @@
 <p>We created an interactive heat map in order to show where crimes occur the most/least, and what if we choose a crime type. The interactivity will help you explore the viz/data more flexibly and promptly.
 The link to the visualization is <a href="https://yuta555.github.io/">here</a>.</p>
 <p>Specifically, the visualization is based on the NYC crime data between 2013 and 2022.</p>
-<p>This visualization provides you with interactive experiences in the following way:
-- Initially, you will see a heat map for the total number of all types of crime.
-- If you click one bar on the bar chart by crime type, the heat map on the left will change so that the based data is limited to the crime type you choose, as well as the color changes.　
-- If you hover the cursor over the map, the corresponding precinct number, the crime type and the number of crime incidents are displayed.
-- You can reset the heatmap to the initial state by clicking “Reset” button.</p>
+<p>This visualization provides you with interactive experiences in the following way:</p>
+<ul>
+<li><p>Initially, you will see a heat map for the total number of all types of crime.</p></li>
+<li><p>If you click one bar on the bar chart by crime type, the heat map on the left will change so that the based data is limited to the crime type you choose, as well as the color changes.　</p></li>
+<li><p>If you hover the cursor over the map, the corresponding precinct number, the crime type and the number of crime incidents are displayed.</p></li>
+<li><p>You can reset the heatmap to the initial state by clicking “Reset” button.</p></li>
+</ul>
 <p>Seeing in detail, Murder, Assault and Sexual crime have the similar pattern of the crime frequency by area that Bronx and the outskirts of Brooklyn and Queens have the high frequency of those types of incidents, while Robbery and Harassment equally occurred almost everywhere. Fraud has a totally different pattern from murder incidents, which we think is because the characteristic of suspects might be different.</p>
-<pre><code>## [1] &quot;/Users/russell_a/Documents/哥大/EXPLORATORY DATA ANALYSIS/NYCrime&quot;</code></pre>
+<pre><code>## [1] &quot;F:/哥大/Fall 2022/STAT 5702 Data Visualization/NYCrime&quot;</code></pre>
 <!DOCTYPE html>
 <html lang="en">
     <head>
