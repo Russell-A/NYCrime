@@ -12,6 +12,7 @@ library(lubridate)
 library(ggplot2)
 library(ggmap)
 library(ggmosaic)
+library(plotly)
 library(forcats)
 
 df$cmplnt_fr_dt <- as.Date(df$cmplnt_fr_dt)
@@ -28,8 +29,9 @@ knitr::kable(df_temp)
 df_ts_22 <- df_ts %>% filter(year_occur == 2022)
 df_occur_count <- as.data.frame(table(df_ts_22$cmplnt_fr_dt))
 df_occur_count$Var1<- as.Date(df_occur_count$Var1)
-p_occurence <- ggplot(df_occur_count) + geom_path(mapping = aes(x = Var1, y = Freq)) + xlab("Date") + ylab("Occurance") + ggtitle("Occurence of Crime in 2022")
-p_occurence
+colnames(df_occur_count) <- c("Date", "Frequency")
+p_occurence <- ggplot(df_occur_count, mapping = aes(x = Date, y = Frequency)) + geom_path()+ geom_point() + xlab("Date") + ylab("Frequency") + ggtitle("Frequency of Crime in 2022")
+ggplotly(p_occurence)
 ```
 
 We can see from the above plot that the number of crimes in 2022 from January to October goes gradually up then down. It indicates that the number of crimes may have a positive correlation to the temperature. When weather is warmer, there tends to be more crimes. 
@@ -38,29 +40,35 @@ We can see from the above plot that the number of crimes in 2022 from January to
 df_ts_22 <- df_ts_22 %>%mutate(hms = as.POSIXct(cmplnt_fr_tm, format = "%H:%M:%OS"))
 df_ts_22 <- df_ts_22 %>%mutate(hour = hour(hms))
 df_occur_hour_count <- as.data.frame(table(df_ts_22$hour))
-ggplot(df_occur_hour_count, mapping = aes(x = Var1, y = Freq, group=1))+geom_line() +geom_point()+xlab("Hour") + ylab("Occurance") + ggtitle("Occurence of crime at different times of the day in 2022")
+colnames(df_occur_hour_count) <- c("Hour", "Frequency")
+p <- ggplot(df_occur_hour_count, mapping = aes(x = Hour, y = Frequency, group=1))+geom_line() +geom_point()+xlab("Hour") + ylab("Frequency") + ggtitle("Frequency of crime at different times of the day in 2022")
+ggplotly(p)
 ```
 
-This plot shos the occurrence of crime at difference times of the day in 2022. The occurrence of crime reaches to its lowest in the morning then gradually goes up. It reaches its peak at 3-5 p.m. then goes down. It's against to our intuitation that most crime occurs at night. In fact, most of the crime occurs in the daytime, especially in the afternoon.
+This plot shows the frequency of crimes at difference times of the day in 2022. The occurrence of crime reaches to its lowest in the morning then gradually goes up. It reaches its peak at 3-5 p.m. then goes down. It's against to our intuition that most crime occurs at night. In fact, most of the crime occurs in the daytime, especially in the afternoon.
 
 ### Law Category Analysis
 
-```{r Occurence_law_2022, message=FALSE}
+```{r Occurence_law_2022, message=FALSE, fig.width=10}
 
 df_law_22 <- df_ts_22 %>% group_by(law_cat_cd, cmplnt_fr_dt) %>% summarise(n = n()) %>% ungroup()
-ggplot(df_law_22, mapping = aes(x = cmplnt_fr_dt, y = n, group = law_cat_cd, color = law_cat_cd)) + geom_line() +labs(x = "Date", y = "Occurence", title = "Occurence of Crime in Different Law Categories in 2022", color = "Law Category")
+colnames(df_law_22) <- c( "Law Category", "Date", "n")
+p <- ggplot(df_law_22, mapping = aes(x = Date, y = n, group = `Law Category`, color = `Law Category`))  + geom_line() +geom_point()+labs(x = "Date", y = "Frequency", title = "Frequency of Crime in Different Law Categories in 2022", color = "Law Category")
+ggplotly(p)
 ```
 
-The plot shows the occurrence of crime falling in different law categories in 2022. We can see from the plot the occurrence in decreasing number is misdemeanor, felony and violation. They all experience an increase and decrease in trend of occurrence in 2022. Moreover, occurrence of misdemeanor has the highest variance while the occurrence of violation is the most stable among the occurrences of these three kinds of crimes.
+The plot shows the frequency of crimes falling in different law categories in 2022. We can see from the plot the frequency in decreasing number is misdemeanor, felony and violation. They all experience an increase and decrease in trend of occurrence in 2022. Moreover, frequency of misdemeanor has the highest variance while the frequency of violation is the most stable among the frequencies of these three kinds of crimes.
 
-```{r Occurence_law_hour_2022, message=FALSE}
+```{r Occurence_law_hour_2022, message=FALSE, fig.width=10}
 df_law_22 <- df_ts_22 %>% group_by(law_cat_cd, hour) %>% summarise(n = n())
 df_law_22$hour <- as.factor(df_law_22$hour)
-ggplot(df_law_22, mapping = aes(x = hour, y = n, group = law_cat_cd, color = law_cat_cd)) + geom_line() +labs(x = "Hour", y = "Occurence", title = "Occurence of Crimes in Different Law Categories in Different Time of a Day in 2022", color = "Law Category")
+colnames(df_law_22) <- c("Law Category", "Hour", "n")
+ p <- ggplot(df_law_22, mapping = aes(x = Hour, y = n, group = `Law Category`, color = `Law Category`)) + geom_line()+geom_point() +labs(x = "Hour", y = "Frequency", title = "Frequency of Crimes in Different Law Categories in Different Time of a Day in 2022", color = "Law Category")
+ ggplotly(p)
 ```
 
 
-The above graph shows the crimes of all three categories reaches their lowest points at 5-6 a.m.. And they reaches their highest points at 3-5 p.m.. We can also see from the plot that in the night, there is another peak for felony and the rate of felony in all categories of crimes goes up. It's to our intuition that the felony often occur at midnight. 
+The above graph shows the frequencies of crimes of all three categories reaches their lowest points at 5-6 a.m.. And they reaches their highest points at 3-5 p.m.. We can also see from the plot that in the night, there is another peak for felony and the rate of felony in all categories of crimes goes up. It's to our intuition that the felony often occur at midnight. 
 
 
 ## Geographic Analysis
