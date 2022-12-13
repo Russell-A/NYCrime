@@ -34,7 +34,6 @@ df_10y <- df_10y %>%
                                       TRUE ~ vic_race
                                       )
           ) %>%
-    mutate("vic_age_18_24" = factor(ifelse(vic_age_group == "18-24", "18-24", "Others"))) %>%
     mutate(ofns_desc_group = factor(case_when(ky_cd == "101" ~ "MURDER",
                                          ky_cd == "104" | ky_cd == "115" | ky_cd == "116" | ky_cd == "233"　~ "SEXUALCRIME",
                                          ky_cd == "105" | ky_cd == "107" | ky_cd == "109" | ky_cd == "110" | ky_cd == "232" | 
@@ -66,11 +65,14 @@ df_10y <- df_10y[(df_10y[, "vic_age_group"]=="<18") |
                  (df_10y[, "vic_age_group"]=="45-64") | 
                  (df_10y[, "vic_age_group"]=="65+"), ]
 
+df_10y <- df_10y %>%
+      mutate("vic_age_18_24" = factor(ifelse(vic_age_group == "18-24", "18-24", "Others")))
 
 df_10y <- df_10y[, c(2,3,4,5,12,13,15,18,26,27,28,39,40,41,42,43,44,45,46,47)]
 
-df_10y <- na.omit(df_10y) 
+# df_10y <- na.omit(df_10y) 
 ```
+
 
 
 ## Write and save the new dataset
