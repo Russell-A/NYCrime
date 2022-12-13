@@ -69,7 +69,7 @@ df_10y <- df_10y[(df_10y[, "vic_age_group"]=="<18") |
 
 df_10y <- df_10y[, c(2,3,4,5,12,13,15,18,26,27,28,39,40,41,42,43,44,45,46,47)]
 
-df_10y <- na.omit(df_10y) 
+#df_10y <- na.omit(df_10y) 
 ```
 
 
@@ -78,4 +78,8 @@ df_10y <- na.omit(df_10y)
 ```{r}
 
 save(df_10y, file = "df_10y.rda")
+```
+
+```{r}
+count(df_10y, "ky_cd")
 ```
