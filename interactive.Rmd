@@ -13,7 +13,3 @@ This visualization provides you with interactive experiences in the following wa
  
 Seeing in detail, Murder, Assault and Sexual crime have the similar pattern of the crime frequency by area that Bronx and the outskirts of Brooklyn and Queens have the high frequency of those types of incidents, while Robbery and Harassment equally occurred almost everywhere. Fraud has a totally different pattern from murder incidents, which we think is because the characteristic of suspects might be different. 
 
-```{r html}
-getwd()
-htmltools::includeHTML("./yuta/index.html")
-```
