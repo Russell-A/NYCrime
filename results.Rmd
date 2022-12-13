@@ -12,7 +12,6 @@ library(lubridate)
 library(ggplot2)
 library(ggmap)
 library(ggmosaic)
-library(plotly)
 library(forcats)
 
 df$cmplnt_fr_dt <- as.Date(df$cmplnt_fr_dt)
@@ -24,14 +23,13 @@ colnames(df_temp) <- c("Year", "Count")
 knitr::kable(df_temp)
 ```
 
-### Frequency Analysis
+### Occurence Analysis
 ```{r Occurence_2022}
 df_ts_22 <- df_ts %>% filter(year_occur == 2022)
 df_occur_count <- as.data.frame(table(df_ts_22$cmplnt_fr_dt))
 df_occur_count$Var1<- as.Date(df_occur_count$Var1)
-colnames(df_occur_count) <- c("Date", "Frequency")
-p_occurence <- ggplot(df_occur_count, mapping = aes(x = Date, y = Frequency)) + geom_path()+ geom_point() + xlab("Date") + ylab("Frequency") + ggtitle("Frequency of Crime in 2022")
-ggplotly(p_occurence)
+p_occurence <- ggplot(df_occur_count) + geom_path(mapping = aes(x = Var1, y = Freq)) + xlab("Date") + ylab("Occurance") + ggtitle("Occurence of Crime in 2022") + scale_x_date(date_breaks = "1 month" , date_labels = "%m/%d")
+p_occurence
 ```
 
 We can see from the above plot that the number of crimes in 2022 from January to October goes gradually up then down. It indicates that the number of crimes may have a positive correlation to the temperature. When weather is warmer, there tends to be more crimes. 
@@ -40,35 +38,30 @@ We can see from the above plot that the number of crimes in 2022 from January to
 df_ts_22 <- df_ts_22 %>%mutate(hms = as.POSIXct(cmplnt_fr_tm, format = "%H:%M:%OS"))
 df_ts_22 <- df_ts_22 %>%mutate(hour = hour(hms))
 df_occur_hour_count <- as.data.frame(table(df_ts_22$hour))
-colnames(df_occur_hour_count) <- c("Hour", "Frequency")
-p <- ggplot(df_occur_hour_count, mapping = aes(x = Hour, y = Frequency, group=1))+geom_line() +geom_point()+xlab("Hour") + ylab("Frequency") + ggtitle("Frequency of crime at different times of the day in 2022")
-ggplotly(p)
+ggplot(df_occur_hour_count, mapping = aes(x = Var1, y = Freq, group=1))+geom_line() +geom_point()+xlab("Hour") + ylab("Occurance") + ggtitle("Occurence of crime at different times of the day in 2022")
 ```
 
-This plot shows the frequency of crimes at difference times of the day in 2022. The occurrence of crime reaches to its lowest in the morning then gradually goes up. It reaches its peak at 3-5 p.m. then goes down. It's against to our intuition that most crime occurs at night. In fact, most of the crime occurs in the daytime, especially in the afternoon.
+This plot shows the occurrence of crime at difference times of the day in 2022. The occurrence of crime reaches to its lowest in the morning then gradually goes up. It reaches its peak at 3-5 p.m. then goes down. It's against to our intuitation that most crime occurs at night. In fact, most of the crime occurs in the daytime, especially in the afternoon.
 
 ### Law Category Analysis
 
-```{r Occurence_law_2022, message=FALSE, fig.width=10}
+```{r Occurence_law_2022, message=FALSE}
 
 df_law_22 <- df_ts_22 %>% group_by(law_cat_cd, cmplnt_fr_dt) %>% summarise(n = n()) %>% ungroup()
-colnames(df_law_22) <- c( "Law Category", "Date", "n")
-p <- ggplot(df_law_22, mapping = aes(x = Date, y = n, group = `Law Category`, color = `Law Category`))  + geom_line() +geom_point()+labs(x = "Date", y = "Frequency", title = "Frequency of Crime in Different Law Categories in 2022", color = "Law Category")
-ggplotly(p)
+ggplot(df_law_22, mapping = aes(x = cmplnt_fr_dt, y = n, group = law_cat_cd, color = law_cat_cd)) + geom_line() +labs(x = "Date", y = "Occurence", title = "Occurence of Crime in Different Law Categories in 2022", color = "Law Category")+scale_x_date(date_breaks = "1 month" , date_labels = "%m/%d")
 ```
 
-The plot shows the frequency of crimes falling in different law categories in 2022. We can see from the plot the frequency in decreasing number is misdemeanor, felony and violation. They all experience an increase and decrease in trend of occurrence in 2022. Moreover, frequency of misdemeanor has the highest variance while the frequency of violation is the most stable among the frequencies of these three kinds of crimes.
+The plot shows the occurrence of crime falling in different law categories in 2022. We can see from the plot the occurrence in decreasing number is misdemeanor, felony and violation. They all experience an increase and decrease in trend of occurrence in 2022. Moreover, occurrence of misdemeanor has the highest variance while the occurrence of violation is the most stable among the occurrences of these three kinds of crimes.
 
-```{r Occurence_law_hour_2022, message=FALSE, fig.width=10}
+```{r Occurence_law_hour_2022, message=FALSE}
 df_law_22 <- df_ts_22 %>% group_by(law_cat_cd, hour) %>% summarise(n = n())
 df_law_22$hour <- as.factor(df_law_22$hour)
-colnames(df_law_22) <- c("Law Category", "Hour", "n")
- p <- ggplot(df_law_22, mapping = aes(x = Hour, y = n, group = `Law Category`, color = `Law Category`)) + geom_line()+geom_point() +labs(x = "Hour", y = "Frequency", title = "Frequency of Crimes in Distinct Law Categories in Distinct Time of Day in 2022", color = "Law Category")
- ggplotly(p)
+ggplot(df_law_22, mapping = aes(x = hour, y = n, group = law_cat_cd, color = law_cat_cd)) + geom_line() +labs(x = "Hour", y = "Occurence", title = "Occurence of Crimes in Different Law Categories in Different Time of a Day in 2022", color = "Law Category")
 ```
 
 
-The above graph shows the frequencies of crimes of all three categories reaches their lowest points at 5-6 a.m.. And they reaches their highest points at 3-5 p.m.. We can also see from the plot that in the night, there is another peak for felony and the rate of felony in all categories of crimes goes up. It's to our intuition that the felony often occur at midnight. 
+The above graph shows the crimes of all three categories reaches their lowest points at 5-6 a.m.. And they reaches their highest points at 3-5 p.m.. We can also see from the plot that in the night, there is another peak for felony and the rate of felony in all categories of crimes goes up. It's to our intuition that the felony often occur at midnight. 
+
 
 ## Geographic Analysis
 
@@ -77,19 +70,6 @@ register_google(key='AIzaSyDMi8CMFkX1AP6wIkqOsoIlNzhzSydkz_Y')
 
 load('./dataset/df_10y.rda')
 ```
-
-### Borough Analysis
-```{r Borough_2022, message=FALSE}
-df_boro_22 <- df_ts_22 %>% group_by(boro_nm, cmplnt_fr_dt) %>% summarise(n = n()) %>% ungroup()
-df_boro_22 <- na.omit(df_boro_22)
-colnames(df_boro_22) <- c("Borough", "Date", "n")
- p <- ggplot(df_boro_22, mapping = aes(x = fct_reorder(Borough, n, median, .desc= T), y = n)) + geom_boxplot()+xlab("Borough") + labs(title = "Frequency of Crimes Everyday in Different Boroughs in 2022")
- ggplotly(p)
-```
-
-This plot shows the frequency of crimes everyday happened in different boroughs in 2022. We can see from the plot that in terms of median, crimes happen in Brooklyn most and happen in Staten Island least everyday. There is few outliers in every box, meaning that the number of crimes everyday happen in a borough is stable.
-
-
 
 ### Analysis for whole area of NYC
 
@@ -116,21 +96,9 @@ ggmap(map) +
         axis.title = element_blank(), 
         axis.line = element_blank()) 
 
-
-ggplot(df_10y) + 
-  geom_mosaic(aes(x=product(ofns_desc_group, vic_age_group), fill=ofns_desc_group), 
-              divider = c("vspine", "hspine") )+
-  facet_grid(cols=vars(vic_sex)) + 
-  theme(axis.text.x = element_text(angle=60, vjust=1, hjust=1)) +
-  xlab('Victim Gender x Age') + ylab('Crime Type') +
-  ggtitle('Mosaic Plot of Crime Type by Victim Gender and Age') 
-
-
 ```
 
 Maps above show that the areas where crimes were likely to occur varied according to the victim's characteristics such as age, sex and race. Specifically, crimes against Asian people tended to occur near Flushing as well as Midtown Manhattan, which is probably because there is a big China town in Flushing and thus many Asian people visit there, while Black Hispanic people was likely to get involved in a crime in Bronx. In terms of victim's gender and age, many young (less than 18) female and male victims in Bronx might draw your attention in particular. We presume that this is because assault and sexual crimes occurred more frequently in Bronx than in other borough (it is explained by an interactive visualization next chapter), and also because teenagers were more likely to suffered from those types of crimes, as the mosaic plot above shows.
-
-This mosaic plot also tells us that the older a victim was, the more likely he/she got involved in a robbery or theft, which we can intuitively understand the reason since the older people cannot move fast and thus will tend to be targeted by thieves. Besides, we can see from this plot that elderly people will be more easily deceived, resulting in the higher proportion of fraud incidents than yonger age groups.
 
 Although we can find a bunch of findings from these visualization, according to our objective and interest, we focus on the data near the campus of Columbia University and try to find some findings.
 
@@ -172,4 +140,24 @@ As a result, more crimes seems to occur in the area more than 3 blocks away from
 Next, we filtered the dataset into only crimes occurred near Columbia campus, and created a mosaic plot. This graph provides us with the information that the 18-24 year-old group, most of whom might be students, was suffer from robbery and theft the most frequently all day long. Although the percentage of each type of crime is almost the same between female and male of the 18-24 group, it seems that the proportion of assault incidents for female groups is slightly higher than male groups. Moreover, since we can find that the female 18-24 group has much higher proportion of sexual crime than other groups (even the "others" female group), especially midnight (12AM-6AM), they should not walk outside alone late at night.
 
 
+## Analysis for relation between Victim and Crime Type 
+```{r victim & suspect corrspond to crime type, fig.height= 10}
+# create mosaic plot of victim attributes and crime type
+ggplot(df_10y) + 
+  geom_mosaic(aes(x=product(ofns_desc_group, vic_age_group), fill=ofns_desc_group), 
+              divider = c("vspine","hspine") )+
+  facet_grid(vars(vic_race_group), vars(vic_sex), scale = "free_x", space = "free_x") + 
+  theme(axis.text.x = element_text(size = 10, angle=60, vjust=1, hjust=1),
+        strip.text.x = element_text(size = 10),
+        strip.text.y = element_text(size = 10),
+        axis.text.y = element_blank()) +
+  xlab('Victim Age Group') + 
+  ylab('Crime Type') +
+  ggtitle('Mosaic Plot of Crime Type by Victim Gender, Age and Race')
+
+```
+
+In order to figure out what type of crime that a person in NYC is most likely to encounter, we divided all crime records into 7 types of crimes based on their descriptions: Murder, Assault, Robbery, Sexual Crime, Fraud, Harassment and Others.
+
+According to this mosaic plot, we can find that Robbery and Assault are two most frequent crime types occur in general that a person could encounter in NYC. It also tells us many representative characteristics based on classification of victims. For example, for any race and gender, the older a victim was, the more likely he/she got involved in a robbery or theft, which we can intuitively understand the reason since the older people cannot move fast and thus will tend to be targeted by thieves. Besides, we can see from this plot that elderly people will be more easily deceived, resulting in the higher proportion of fraud incidents than younger age groups. In addition, females under 18 might have higher probability to become victims of Sexual Crime than other groups. White and Aisan / Pacific Islanders race have higher probability to encounter Robbery crimes than other race groups.
 

@@ -3,6 +3,7 @@ title: "NYC crimes"
 author: "Shumin, Xinhao, and Yuta"
 date: "`r Sys.Date()`"
 site: bookdown::bookdown_site
+language: "en"
 ---
 
 # Introduction
