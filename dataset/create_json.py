@@ -4,8 +4,9 @@
 import json 
 import pandas as pd
 
-def create_json_forHeat(df):
-    df = pd.read_csv(df)
+def create_json_forHeat(path):
+    
+    df = pd.read_csv(path)
     df = df.astype('str')
     output = {}
 
@@ -42,7 +43,7 @@ def create_json_forBar(df):
 if __name__ == '__main__':
 
     # create json file for heat map
-    file = 'num_crime.csv'
+    file = '/Users/yuta/Documents/GitHub/NYCrime/dataset/num_crime.csv'
     js_file1 = create_json_forHeat(file)
 
     with open('num_crime.json', 'w') as f:
