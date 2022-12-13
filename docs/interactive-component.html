@@ -132,6 +132,353 @@ The link to the visualization is <a href="https://yuta555.github.io/">here</a>.<
 - If you hover the cursor over the map, the corresponding precinct number, the crime type and the number of crime incidents are displayed.
 - You can reset the heatmap to the initial state by clicking “Reset” button.</p>
 <p>Seeing in detail, Murder, Assault and Sexual crime have the similar pattern of the crime frequency by area that Bronx and the outskirts of Brooklyn and Queens have the high frequency of those types of incidents, while Robbery and Harassment equally occurred almost everywhere. Fraud has a totally different pattern from murder incidents, which we think is because the characteristic of suspects might be different.</p>
+<script src="https://d3js.org/d3.v7.js"></script>
+<script src="https://d3js.org/d3-array.v2.min.js"></script>
+<script src="https://d3js.org/d3-geo.v2.min.js"></script>
+<pre><code>&lt;style type=&quot;text/css&quot;&gt;
+.modal {
+    display: none; 
+    position: fixed; 
+    z-index: 1; 
+    left: 0;
+    top: 0;
+    width: 100%; 
+    height: 100%; 
+    overflow: auto; 
+    background-color: rgb(0,0,0); 
+    background-color: rgba(0,0,0,0.7); 
+}
+
+// Modal Content/Box
+.modal-content {
+    background-color: #fefefe;
+    margin: 15% auto; 
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%; 
+}
+
+// The Close Button
+.close {
+    color: #aaa;
+    float: right;
+    font-size: 32px;
+    font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.instruction {
+  position: fixed;
+  bottom: 40px;
+  right: 40px;
+  cursor:pointer;
+  -webkit-border-radius: 10;
+  -moz-border-radius: 10;
+  border-radius: 10px;
+  font-family: Arial;
+  color: white;
+  font-size: 14px;
+  background: grey;
+  padding: 10px 20px 10px 20px;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.instruction:hover {
+  background: black;
+  text-decoration: none;
+}
+&lt;/style&gt;
+
+&lt;body&gt;
+    &lt;h2&gt;NYC Crime Heat Map and Bar Chart&lt;/h2&gt;
+    &lt;div align=&quot;left&quot; style=&quot;position:relative;top:14px&quot;&gt;
+        &lt;button id=&quot;reset&quot;&gt;Reset&lt;/button&gt;
+    &lt;/div&gt;
+    
+&lt;button id=&quot;myBtn&quot; class=&quot;instruction&quot;&gt;Instruction&lt;/button&gt;
+&lt;div id=&quot;myModal&quot; class=&quot;modal&quot;&gt;
+    &lt;div class=&quot;modal-content&quot;&gt;
+        &lt;span class=&quot;close&quot;&gt;&amp;times;&lt;/span&gt;
+        &lt;h1&gt;Instructions&lt;/h1&gt;
+        &lt;p&gt;The following visualization is based on the NYC crime data between 2013 and 2022 which can be exported from NYC OpenData.&lt;/p&gt;
+        &lt;p&gt;This visualization provides you with interactive experiences in the following way:&lt;/p&gt;
+        &lt;ul&gt;
+            &lt;li&gt;Initially, you will see a heat map for the total number of all types of crime.&lt;/li&gt;
+            &lt;li&gt;If you click one bar on the bar chart by crime type, the heat map on the left will change so that the based data is limited to the crime type you choose, as well as the color changes.　&lt;/li&gt;
+            &lt;li&gt;You can reset heatmap to the initial state by clicking &quot;Reset&quot; button.&lt;/li&gt;
+        &lt;/ul&gt;
+    &lt;/div&gt;
+&lt;/div&gt;
+
+    &lt;script&gt;        
+var modal = document.getElementById(&#39;myModal&#39;);
+
+// Get the button that opens the modal
+var btn = document.getElementById(&quot;myBtn&quot;);
+
+// Get the &lt;span&gt; element that closes the modal
+var span = document.getElementsByClassName(&quot;close&quot;)[0];
+
+// When the user clicks on the button, open the modal
+btn.onclick = function() {
+    modal.style.display = &quot;block&quot;;
+}
+
+// When the user clicks on &lt;span&gt; (x), close the modal
+span.onclick = function() {
+    modal.style.display = &quot;none&quot;;
+}
+
+// When the user clicks anywhere outside of the modal, close it
+window.onclick = function(event) {
+    if (event.target == modal) {
+    modal.style.display = &quot;none&quot;;
+    }
+}
+    
+    const SvgWidth = 1200
+    const SvgHeight = 600
+    
+    const MapWidth = 600
+    const MapHeight = 400
+    const MapMargin = {&quot;left&quot;: -200, &quot;top&quot;: 50}
+
+    const barWidth = 600
+    const barHeight = 300
+    const barMargin = {&quot;left&quot;: 600, &quot;top&quot;: 100}
+
+var xScale = d3.scaleBand().range ([0, barWidth]).padding(0.4);
+var yScale = d3.scaleLinear().range ([barHeight, 0]);
+   
+    var CRIME_TYPE = &#39;All&#39;;
+
+    const projection = d3.geoMercator()
+            .scale(43000)
+            .center([-73.94, 40.70]); 
+
+    const pathGenerator = d3.geoPath()
+        .projection(projection);
+    
+    var svg = d3.select(&quot;body&quot;).append(&quot;svg&quot;)
+                .attr(&quot;width&quot;, SvgWidth)
+                .attr(&quot;height&quot;, SvgHeight)
+    
+    var background = svg.append(&quot;rect&quot;)
+                            .attr(&quot;class&quot;, &quot;background&quot;)
+                            .attr(&quot;width&quot;, SvgWidth)
+                            .attr(&quot;height&quot;, SvgHeight)
+                            .style(&#39;fill&#39;, &#39;white&#39;)
+
+    var map = svg.append(&#39;g&#39;)
+                      .attr(&#39;width&#39;, MapWidth)
+                      .attr(&#39;height&#39;, MapHeight)
+                      .attr(&quot;transform&quot;, &quot;translate(&quot; + MapMargin.left+ &quot;,&quot; + MapMargin.top + &quot;)&quot;);
+    
+    
+    // create tooltip
+    var tooltip = d3.select(&quot;body&quot;)
+        .append(&quot;div&quot;)
+        .style(&quot;position&quot;, &quot;absolute&quot;)
+        .style(&quot;background-color&quot;, &quot;#CCE7F5&quot;)
+        .style(&quot;padding&quot;, &quot;4px&quot;)
+        .style(&quot;z-index&quot;, &quot;2&quot;)
+        .style(&quot;visibility&quot;, &quot;hidden&quot;)
+        .text(&quot;a simple tooltip&quot;);
+    
+    var CrimeColorMap = {   MURDER: &#39;#4daf4a&#39;, 
+                            ASSAULT: &#39;#377eb8&#39;,
+                            ROBBERY: &#39;#ff7f00&#39;,
+                            SEXUALCRIME: &#39;#984ea3&#39;,
+                            FRAUD: &#39;#6C182A&#39;,
+                HARRASSMENT: &#39;#ffd700&#39;,
+                OTHERS: &#39;#696969&#39;
+              }
+    
+var barChart = svg.append(&#39;g&#39;)
+                      .attr(&#39;width&#39;, barWidth)
+                      .attr(&#39;height&#39;, barHeight)
+                      .attr(&quot;transform&quot;, &quot;translate(&quot; + barMargin.left+ &quot;,&quot; + barMargin.top + &quot;)&quot;);
+    
+const barColor = d3.scaleOrdinal([&#39;#4daf4a&#39;,&#39;#377eb8&#39;,&#39;#ff7f00&#39;,&#39;#984ea3&#39;,&#39;#6C182A&#39;,&#39;#ffd700&#39;,&#39;#696969&#39;]);
+    
+var reset_button = d3.select(&quot;button#reset&quot;)
+         .on(&#39;click&#39;, function(){
+         reset_map();
+         reset_bar();
+         });
+
+
+// Heat Map
+    d3.json(&#39;police_precincts.geo.json&#39;).then(function(geo_data){
+        d3.json(&#39;num_crime.json&#39;).then(function(data){
+            var freq_list = [];
+
+    for (id in data){
+                freq_list.push(data[id][&#39;All&#39;]);
+            }
+            maxFreq = d3.max(freq_list);
+            minFreq = d3.min(freq_list);
+   
+
+            map.selectAll(&#39;path&#39;)
+        .data(geo_data.features)
+        .enter().append(&#39;path&#39;)
+            .attr(&quot;id&quot;, function(d){return d.properties.Precinct})
+            .attr(&quot;sum_freq&quot;, function(d){return data[d.properties.Precinct][&#39;All&#39;]})
+            .attr(&quot;stroke&quot;,&quot;grey&quot;)
+            .attr(&quot;stroke-width&quot;,0.75)
+            .style(&#39;fill&#39;, &#39;#E13C19&#39;)
+            .style(&#39;fill-opacity&#39;, function(d){
+            if (data.hasOwnProperty(d.properties.Precinct)){
+                return (data[d.properties.Precinct][&#39;All&#39;] - minFreq) / (maxFreq - minFreq);
+            }
+            return 0;
+            })
+            .attr(&#39;d&#39;, pathGenerator)
+            .on(&#39;mouseover&#39;, function (d) {
+                console.log(d);
+                if (CRIME_TYPE == &quot;All&quot;){
+                crime_freq = data[this.id][&#39;All&#39;];
+                }
+                else{
+                crime_freq = data[this.id][CRIME_TYPE];
+                }
+                tooltip.style(&quot;visibility&quot;, &quot;visible&quot;)
+                   .text(&quot;Precinct-ID: &quot; + this.id + &quot;,\n&quot; + 
+                   &quot;  # of Crime: &quot; + crime_freq + &quot;,  Crime Type: &quot; + CRIME_TYPE);
+
+                d3.select(this).transition()
+                    .attr(&#39;stroke&#39;, &#39;black&#39;)
+                    .attr(&quot;stroke-width&quot;, 1.2);
+            })
+            .on(&quot;mousemove&quot;, function(){
+                return tooltip.style(&quot;top&quot;, (event.pageY-20)+&quot;px&quot;)
+                      .style(&quot;left&quot;,(event.pageX+20)+&quot;px&quot;);})
+            .on(&#39;mouseout&#39;, function (d, i) {
+                tooltip.style(&quot;visibility&quot;, &quot;hidden&quot;);
+                d3.select(this).transition()
+                    .attr(&#39;stroke&#39;, &#39;grey&#39;)
+                    .attr(&quot;stroke-width&quot;,0.75);   
+            })
+        });    
+    });
+    
+    
+// Bar Chart
+d3.json(&#39;num_crime_byType.json&#39;).then(function(data){
+
+    xScale.domain(data.map(function(d) { return d.crime_type; }));
+    yScale.domain([0, d3.max(data, function(d) { return d.freq;})]);
+
+    barChart.append(&quot;g&quot;)
+    .attr(&quot;transform&quot;, &quot;translate(0,&quot; + barHeight + &quot;)&quot;)
+    .call(d3.axisBottom(xScale))
+    .append(&quot;text&quot;)
+    .attr(&quot;y&quot;, barHeight - 250)
+    .attr(&quot;x&quot;, barWidth / 2 + 50)
+    .attr(&quot;text-anchor&quot;, &quot;end&quot;)
+    .attr(&quot;fill&quot;, &quot;black&quot;)
+    .text(&quot;Bar Chart by Crime Type&quot;)
+    .style(&quot;font-size&quot;, &quot;14px&quot;);
+
+    barChart.append(&quot;g&quot;)
+    .attr(&quot;class&quot;, &quot;yAxis&quot;)
+    .call(d3.axisLeft(yScale).tickFormat(function(d){
+    return d;
+    }).ticks());
+
+    barChart.selectAll(&quot;.bar&quot;).remove();
+    barChart.selectAll(&quot;.bar&quot;)
+      .data(data)
+      .enter().append(&quot;rect&quot;)
+    .attr(&quot;class&quot;, &quot;bar&quot;)
+    .attr(&quot;x&quot;, function(d) { return xScale(d.crime_type); })
+    .attr(&quot;y&quot;, function(d) { return yScale(d.freq); })
+    .attr(&quot;width&quot;, xScale.bandwidth())
+    .attr(&quot;height&quot;, function(d) { return barHeight - yScale(d.freq); })
+    .attr(&quot;fill&quot;, function (d){ return barColor(d.crime_type); })
+    .on(&#39;click&#39;, function(event, d){
+        d3.select(this).select(&quot;.bar&quot;)
+                       .style(&quot;fill&quot;, CrimeColorMap[d.crime_type])
+        CRIME_TYPE = d.crime_type
+//      highlightBar(d.crime_type)
+        update_map(d.crime_type)
+        });
+ });
+
+//function highlightBar(crimeType){
+    //      barChart.select(&#39;.bar&#39;)
+    //            .select(&#39;path&#39;)
+    //            .style(&#39;fill-opacity&#39;, function(d){
+    //                if (data.crime_type == crimeType){
+    //                    return 1;
+    //                }
+    //                return 0.35;
+    //            })
+    //}
+    
+    // Function for updating heat map after click
+    function update_map(crimeType){
+            d3.json(&#39;police_precincts.geo.json&#39;).then(function(geo_data){
+                d3.json(&#39;num_crime.json&#39;).then(function(data){
+            
+                    var crime_freq = [];
+
+        for (id in data){
+                        crime_freq.push(data[id][crimeType]);
+                    }
+                    maxFreq = d3.max(crime_freq);
+                    minFreq = d3.min(crime_freq);
+        
+                    map.selectAll(&#39;path&#39;)
+            .style(&quot;fill&quot;, CrimeColorMap[crimeType])
+                        .style(&#39;fill-opacity&#39;, function(d){
+                            if (data.hasOwnProperty(d.properties.Precinct)){
+                                return (data[d.properties.Precinct][crimeType] - minFreq) / (maxFreq - minFreq);
+                            }
+                            return 0;
+                        })
+
+                });    
+        });
+    }
+
+    function reset_map(){
+        d3.json(&#39;police_precincts.geo.json&#39;).then(function(geo_data){
+                // console.log(geo_data)
+                d3.json(&#39;num_crime.json&#39;).then(function(data){
+                    var crime_freq = [];
+                    // calculae sum values for each precinct
+                    for (id in data){
+                        crime_freq.push(data[id][&#39;All&#39;]);
+                    }
+                    maxFreq = d3.max(crime_freq);
+                    minFreq = d3.min(crime_freq);
+
+                    map.selectAll(&#39;path&#39;)
+                        .style(&#39;fill&#39;, &#39;#E13C19&#39;)
+                        .style(&#39;fill-opacity&#39;, function(d){
+                            if (data.hasOwnProperty(d.properties.Precinct)){
+                                return (data[d.properties.Precinct][&#39;All&#39;] - minFreq) / (maxFreq - minFreq);
+                            }
+                            return 0;
+                        })
+
+                });    
+        });
+    }
+
+
+    &lt;/script&gt;
+&lt;/body&gt;</code></pre>
+</html>
 
 </div>
             </section>

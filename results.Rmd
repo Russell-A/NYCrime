@@ -3,7 +3,7 @@
 
 
 ## Time series analysis
-The majority of the recorded crime in this dataset is happened in 2022 (>99%). Therefore, we focus on the time series analysis in 2022. Because of the release date of the dataset, we only have data before October.
+The majority of the recorded crime in this dataset is happened in 2022 (>97%). Therefore, we focus on the time series analysis in 2022. Because of the release date of the dataset, we only have data before October.
 
 ```{r count_year}
 library(tidyverse)
@@ -24,7 +24,6 @@ df_ts_22 <- df_ts %>% filter(year_occur == 2022)
 df_occur_count <- as.data.frame(table(df_ts_22$cmplnt_fr_dt))
 df_occur_count$Var1<- as.Date(df_occur_count$Var1)
 p_occurence <- ggplot(df_occur_count) + geom_path(mapping = aes(x = Var1, y = Freq)) + xlab("Date") + ylab("Occurance") + ggtitle("Occurence of Crime in 2022")
-ggsave(p_occurence, filename = "./figure/occurence_2022.png")
 p_occurence
 ```
 
@@ -41,17 +40,16 @@ This plot shos the occurrence of crime at difference times of the day in 2022. T
 
 ### Law Category Analysis
 
-```{r Occurence_law_2022}
+```{r Occurence_law_2022, message=FALSE}
 
-df_law_22 <- df_ts_22 %>% group_by(law_cat_cd) %>% count(cmplnt_fr_dt)
+df_law_22 <- df_ts_22 %>% group_by(law_cat_cd, cmplnt_fr_dt) %>% summarise(n = n()) %>% ungroup()
 ggplot(df_law_22, mapping = aes(x = cmplnt_fr_dt, y = n, group = law_cat_cd, color = law_cat_cd)) + geom_line() +labs(x = "Date", y = "Occurence", title = "Occurence of Crime in Different Law Categories in 2022", color = "Law Category")
 ```
 
 The plot shows the occurrence of crime falling in different law categories in 2022. We can see from the plot the occurrence in decreasing number is misdemeanor, felony and violation. They all experience an increase and decrease in trend of occurrence in 2022. Moreover, occurrence of misdemeanor has the highest variance while the occurrence of violation is the most stable among the occurrences of these three kinds of crimes.
 
-```{r Occurence_law_hour_2022}
-
-df_law_22 <- df_ts_22 %>% group_by(law_cat_cd) %>% count(hour)
+```{r Occurence_law_hour_2022, message=FALSE}
+df_law_22 <- df_ts_22 %>% group_by(law_cat_cd, hour) %>% summarise(n = n())
 df_law_22$hour <- as.factor(df_law_22$hour)
 ggplot(df_law_22, mapping = aes(x = hour, y = n, group = law_cat_cd, color = law_cat_cd)) + geom_line() +labs(x = "Hour", y = "Occurence", title = "Occurence of Crimes in Different Law Categories in Different Time of a Day in 2022", color = "Law Category")
 ```
