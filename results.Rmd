@@ -70,7 +70,6 @@ colnames(df_law_22) <- c("Law Category", "Hour", "n")
 
 The above graph shows the frequencies of crimes of all three categories reaches their lowest points at 5-6 a.m.. And they reaches their highest points at 3-5 p.m.. We can also see from the plot that in the night, there is another peak for felony and the rate of felony in all categories of crimes goes up. It's to our intuition that the felony often occur at midnight. 
 
-
 ## Geographic Analysis
 
 ```{r}
@@ -78,6 +77,19 @@ register_google(key='AIzaSyDMi8CMFkX1AP6wIkqOsoIlNzhzSydkz_Y')
 
 load('./dataset/df_10y.rda')
 ```
+
+### Borough Analysis
+```{r Borough_2022, message=FALSE, fig.width=10}
+df_boro_22 <- df_ts_22 %>% group_by(boro_nm, cmplnt_fr_dt) %>% summarise(n = n()) %>% ungroup()
+df_boro_22 <- na.omit(df_boro_22)
+colnames(df_boro_22) <- c("Borough", "Date", "n")
+ p <- ggplot(df_boro_22, mapping = aes(x = fct_reorder(Borough, n, median, .desc= T), y = n)) + geom_boxplot()+xlab("Borough") + labs(title = "Frequency of Crimes Everyday in Different Boroughs in 2022")
+ ggplotly(p)
+```
+
+This plot shows the frequency of crimes everyday happened in different boroughs in 2022. We can see from the plot that in terms of median, crimes happen in Brooklyn most and happen in Staten Island least everyday. There is few outliers in every box, meaning that the number of crimes everyday happen in a borough is stable.
+
+
 
 ### Analysis for whole area of NYC
 
