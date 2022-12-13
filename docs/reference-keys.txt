@@ -9,7 +9,7 @@ cleaning-transformation
 missing-value-analysis
 results
 time-series-analysis
-occurence-analysis
+frequency-analysis
 law-category-analysis
 geographic-analysis
 borough-analysis
