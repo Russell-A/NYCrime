@@ -6,7 +6,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <title>Chapter 4 Results | NYC crimes</title>
   <meta name="description" content="Chapter 4 Results | NYC crimes" />
-  <meta name="generator" content="bookdown 0.29 and GitBook 2.6.7" />
+  <meta name="generator" content="bookdown 0.31 and GitBook 2.6.7" />
 
   <meta property="og:title" content="Chapter 4 Results | NYC crimes" />
   <meta property="og:type" content="book" />
@@ -53,12 +53,12 @@
 <link href="libs/anchor-sections-1.1.0/anchor-sections-hash.css" rel="stylesheet" />
 <script src="libs/anchor-sections-1.1.0/anchor-sections.js"></script>
 <script src="libs/htmlwidgets-1.5.4/htmlwidgets.js"></script>
-<script src="libs/plotly-binding-4.10.1/plotly.js"></script>
+<script src="libs/plotly-binding-4.10.0/plotly.js"></script>
 <script src="libs/typedarray-0.1/typedarray.min.js"></script>
 <link href="libs/crosstalk-1.2.0/css/crosstalk.min.css" rel="stylesheet" />
 <script src="libs/crosstalk-1.2.0/js/crosstalk.min.js"></script>
-<link href="libs/plotly-htmlwidgets-css-2.11.1/plotly-htmlwidgets.css" rel="stylesheet" />
-<script src="libs/plotly-main-2.11.1/plotly-latest.min.js"></script>
+<link href="libs/plotly-htmlwidgets-css-2.5.1/plotly-htmlwidgets.css" rel="stylesheet" />
+<script src="libs/plotly-main-2.5.1/plotly-latest.min.js"></script>
 
 
 
@@ -98,6 +98,11 @@
 <ul>
 <li class="chapter" data-level="4.1.1" data-path="results.html"><a href="results.html#occurence-analysis"><i class="fa fa-check"></i><b>4.1.1</b> Occurence Analysis</a></li>
 <li class="chapter" data-level="4.1.2" data-path="results.html"><a href="results.html#law-category-analysis"><i class="fa fa-check"></i><b>4.1.2</b> Law Category Analysis</a></li>
+</ul></li>
+<li class="chapter" data-level="4.2" data-path="results.html"><a href="results.html#geographic-analysis"><i class="fa fa-check"></i><b>4.2</b> Geographic Analysis</a>
+<ul>
+<li class="chapter" data-level="4.2.1" data-path="results.html"><a href="results.html#analysis-for-whole-area-of-nyc"><i class="fa fa-check"></i><b>4.2.1</b> Analysis for whole area of NYC</a></li>
+<li class="chapter" data-level="4.2.2" data-path="results.html"><a href="results.html#analysis-for-the-area-near-columbia-university"><i class="fa fa-check"></i><b>4.2.2</b> Analysis for the area near Columbia University</a></li>
 </ul></li>
 </ul></li>
 <li class="chapter" data-level="5" data-path="interactive-component.html"><a href="interactive-component.html"><i class="fa fa-check"></i><b>5</b> Interactive component</a></li>
@@ -157,6 +162,24 @@
 <p>The plot shows the occurrence of crime falling in different law categories in 2022. We can see from the plot the occurrence in decreasing number is misdemeanor, felony and violation. They all experience an increase and decrease in trend of occurrence in 2022. Moreover, occurrence of misdemeanor has the highest variance while the occurrence of violation is the most stable among the occurrences of these three kinds of crimes.</p>
 <p><img src="finalproj_files/figure-html/Occurence_law_hour_2022-1.png" width="672" /></p>
 <p>The above graph shows the crimes of all three categories reaches their lowest points at 5-6 a.m.. And they reaches their highest points at 3-5 p.m.. We can also see from the plot that in the night, there is another peak for felony and the rate of felony in all categories of crimes goes up. It’s to our intuition that the felony often occur at midnight.</p>
+</div>
+</div>
+<div id="geographic-analysis" class="section level2 hasAnchor" number="4.2">
+<h2><span class="header-section-number">4.2</span> Geographic Analysis<a href="results.html#geographic-analysis" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div id="analysis-for-whole-area-of-nyc" class="section level3 hasAnchor" number="4.2.1">
+<h3><span class="header-section-number">4.2.1</span> Analysis for whole area of NYC<a href="results.html#analysis-for-whole-area-of-nyc" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>To create and discuss geographic visualization, we use the crime data only for the recent 10 years, that is, between 2013 and 2022, because we are interested in the current crime situation in the NYC and the situation might change dramatically if a few decades have passed.</p>
+<p><img src="finalproj_files/figure-html/unnamed-chunk-6-1.png" width="672" /><img src="finalproj_files/figure-html/unnamed-chunk-6-2.png" width="672" /><img src="finalproj_files/figure-html/unnamed-chunk-6-3.png" width="672" /></p>
+<p>Maps above show that the areas where crimes were likely to occur varied according to the victim’s characteristics such as age, sex and race. Specifically, crimes against Asian people tended to occur near Flushing as well as Midtown Manhattan, which is probably because there is a big China town in Flushing and thus many Asian people visit there, while Black Hispanic people was likely to get involved in a crime in Bronx. In terms of victim’s gender and age, many young (less than 18) female and male victims in Bronx might draw your attention in particular. We presume that this is because assault and sexual crimes occurred more frequently in Bronx than in other borough (it is explained by an interactive visualization next chapter), and also because teenagers were more likely to suffered from those types of crimes, as the mosaic plot above shows.</p>
+<p>This mosaic plot also tells us that the older a victim was, the more likely he/she got involved in a robbery or theft, which we can intuitively understand the reason since the older people cannot move fast and thus will tend to be targeted by thieves. Besides, we can see from this plot that elderly people will be more easily deceived, resulting in the higher proportion of fraud incidents than yonger age groups.</p>
+<p>Although we can find a bunch of findings from these visualization, according to our objective and interest, we focus on the data near the campus of Columbia University and try to find some findings.</p>
+</div>
+<div id="analysis-for-the-area-near-columbia-university" class="section level3 hasAnchor" number="4.2.2">
+<h3><span class="header-section-number">4.2.2</span> Analysis for the area near Columbia University<a href="results.html#analysis-for-the-area-near-columbia-university" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p><img src="finalproj_files/figure-html/unnamed-chunk-7-1.png" width="672" /><img src="finalproj_files/figure-html/unnamed-chunk-7-2.png" width="672" /></p>
+<p>We zoomed in on the map and created a heat map again so that we can find where is dangerous near our campus.
+As a result, more crimes seems to occur in the area more than 3 blocks away from the campus than just around the corner. In particular, we should be careful if we go around the 125th street Amsterdam Avenue and in the east side of Morningside Park.</p>
+<p>Next, we filtered the dataset into only crimes occurred near Columbia campus, and created a mosaic plot. This graph provides us with the information that the 18-24 year-old group, most of whom might be students, was suffer from robbery and theft the most frequently all day long. Although the percentage of each type of crime is almost the same between female and male of the 18-24 group, it seems that the proportion of assault incidents for female groups is slightly higher than male groups. Moreover, since we can find that the female 18-24 group has much higher proportion of sexual crime than other groups (even the “others” female group), especially midnight (12AM-6AM), they should not walk outside alone late at night.</p>
 
 </div>
 </div>

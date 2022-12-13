@@ -11,5 +11,8 @@ results
 time-series-analysis
 occurence-analysis
 law-category-analysis
+geographic-analysis
+analysis-for-whole-area-of-nyc
+analysis-for-the-area-near-columbia-university
 interactive-component
 conclusion
