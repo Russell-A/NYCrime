@@ -15,7 +15,7 @@ def create_json_forHeat(df):
                     "ROBBERY" : df.loc[i, "ROBBERY"],
                     "SEXUALCRIME" : df.loc[i, "SEXUALCRIME"],
                     "FRAUD" : df.loc[i, "FRAUD"],
-                    "HARRASSMENT" : df.loc[i, "HARRASSMENT"],
+                    "HARASSMENT" : df.loc[i, "HARASSMENT"],
                     "OTHERS" : df.loc[i, "OTHERS"],
                     "All": df.loc[i, "All"]}
 
@@ -27,7 +27,7 @@ def create_json_forBar(df):
     df = pd.read_csv(df)
 #    df = df.astype('str')
     output = []
-    crime_type = ["MURDER", "ASSAULT", "ROBBERY", "SEXUALCRIME", "FRAUD", "HARRASSMENT","OTHERS"]
+    crime_type = ["MURDER", "ASSAULT", "ROBBERY", "SEXUALCRIME", "FRAUD", "HARASSMENT","OTHERS"]
 
     for type in crime_type:
         nest = {}
