@@ -24,7 +24,7 @@ colnames(df_temp) <- c("Year", "Count")
 knitr::kable(df_temp)
 ```
 
-### Occurence Analysis
+### Frequency Analysis
 ```{r Occurence_2022}
 df_ts_22 <- df_ts %>% filter(year_occur == 2022)
 df_occur_count <- as.data.frame(table(df_ts_22$cmplnt_fr_dt))
@@ -63,7 +63,7 @@ The plot shows the frequency of crimes falling in different law categories in 20
 df_law_22 <- df_ts_22 %>% group_by(law_cat_cd, hour) %>% summarise(n = n())
 df_law_22$hour <- as.factor(df_law_22$hour)
 colnames(df_law_22) <- c("Law Category", "Hour", "n")
- p <- ggplot(df_law_22, mapping = aes(x = Hour, y = n, group = `Law Category`, color = `Law Category`)) + geom_line()+geom_point() +labs(x = "Hour", y = "Frequency", title = "Frequency of Crimes in Different Law Categories in Different Time of a Day in 2022", color = "Law Category")
+ p <- ggplot(df_law_22, mapping = aes(x = Hour, y = n, group = `Law Category`, color = `Law Category`)) + geom_line()+geom_point() +labs(x = "Hour", y = "Frequency", title = "Frequency of Crimes in Distinct Law Categories in Distinct Time of Day in 2022", color = "Law Category")
  ggplotly(p)
 ```
 
@@ -79,7 +79,7 @@ load('./dataset/df_10y.rda')
 ```
 
 ### Borough Analysis
-```{r Borough_2022, message=FALSE, fig.width=10}
+```{r Borough_2022, message=FALSE}
 df_boro_22 <- df_ts_22 %>% group_by(boro_nm, cmplnt_fr_dt) %>% summarise(n = n()) %>% ungroup()
 df_boro_22 <- na.omit(df_boro_22)
 colnames(df_boro_22) <- c("Borough", "Date", "n")
