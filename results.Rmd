@@ -2,7 +2,6 @@
 # Results
 
 
-
 ## Time series analysis
 The majority of the recorded crime in this dataset is happened in 2022 (>97%). Therefore, we focus on the time series analysis in 2022. Because of the release date of the dataset, we only have data before October.
 
@@ -71,13 +70,45 @@ colnames(df_law_22) <- c("Law Category", "Hour", "n")
 
 The above graph shows the frequencies of crimes of all three categories reaches their lowest points at 5-6 a.m.. And they reaches their highest points at 3-5 p.m.. We can also see from the plot that in the night, there is another peak for felony and the rate of felony in all categories of crimes goes up. It's to our intuition that the felony often occur at midnight. 
 
-## Geographic Analysis
+## Analysis for relation between Victim and Crime Type 
 
+In order to figure out what type of crime that a person in NYC is most likely to encounter, we divided all crime records into 7 types of crimes based on their descriptions: Murder, Assault, Robbery, Sexual Crime, Fraud, Harassment and Others. In this section, we use the crime data in the recent 10 years, that is, between 2013 and 2022.
 ```{r}
 register_google(key='AIzaSyDMi8CMFkX1AP6wIkqOsoIlNzhzSydkz_Y')
 
 load('./dataset/df_10y.rda')
 ```
+
+```{r crime type frequency}
+ofns <- df_10y %>% select(ofns_desc_group) %>% group_by(ofns_desc_group) %>% summarise(n = n()) %>% arrange(desc(n))
+ggplot(ofns, mapping = aes(x = reorder(ofns_desc_group, n, identity, decreasing = T), y = n)) + geom_bar(stat = 'identity') + labs(x = 'Crime Type', y = 'Frequency', title = "Frequency of Crimes vs. Crime Types")
+```
+
+From the bar chart we can see that in the past decade, robbery occurred the most. Sexual crime, fraud and murder occurred relatively infrequent.
+
+```{r victim & suspect corrspond to crime type, fig.height= 10}
+# create mosaic plot of victim attributes and crime type
+ggplot(df_10y) + 
+  geom_mosaic(aes(x=product(ofns_desc_group, vic_age_group), fill=ofns_desc_group), 
+              divider = c("vspine","hspine") )+
+  facet_grid(vars(vic_race_group), vars(vic_sex), scale = "free_x", space = "free_x") + 
+  theme(axis.text.x = element_text(size = 10, angle=60, vjust=1, hjust=1),
+        strip.text.x = element_text(size = 10),
+        strip.text.y = element_text(size = 10),
+        axis.text.y = element_blank()) +
+  xlab('Victim Age Group') + 
+  ylab('Crime Type') +
+  ggtitle('Mosaic Plot of Crime Type by Victim Gender, Age and Race')
+
+```
+
+
+According to this mosaic plot, we can find that Robbery and Assault are two most frequent crime types occur in general that a person could encounter in NYC. It also tells us many representative characteristics based on classification of victims. For example, for any race and gender, the older a victim was, the more likely he/she got involved in a robbery or theft, which we can intuitively understand the reason since the older people cannot move fast and thus will tend to be targeted by thieves. Besides, we can see from this plot that elderly people will be more easily deceived, resulting in the higher proportion of fraud incidents than younger age groups. In addition, females under 18 might have higher probability to become victims of Sexual Crime than other groups. White and Aisan / Pacific Islanders race have higher probability to encounter Robbery crimes than other race groups.
+
+
+## Geographic Analysis
+
+
 
 ### Borough Analysis
 ```{r Borough_2022, message=FALSE}
@@ -171,24 +202,5 @@ ggplot(df_columbia) +
 
 Next, we filtered the dataset into only crimes occurred near Columbia campus, and created a mosaic plot. This graph provides us with the information that the 18-24 year-old group, most of whom might be students, was suffer from robbery and theft the most frequently all day long. Although the percentage of each type of crime is almost the same between female and male of the 18-24 group, it seems that the proportion of assault incidents for female groups is slightly higher than male groups. Moreover, since we can find that the female 18-24 group has much higher proportion of sexual crime than other groups (even the "others" female group), especially midnight (12AM-6AM), they should not walk outside alone late at night.
 
-## Analysis for relation between Victim and Crime Type 
-```{r victim & suspect corrspond to crime type, fig.height= 10}
-# create mosaic plot of victim attributes and crime type
-ggplot(df_10y) + 
-  geom_mosaic(aes(x=product(ofns_desc_group, vic_age_group), fill=ofns_desc_group), 
-              divider = c("vspine","hspine") )+
-  facet_grid(vars(vic_race_group), vars(vic_sex), scale = "free_x", space = "free_x") + 
-  theme(axis.text.x = element_text(size = 10, angle=60, vjust=1, hjust=1),
-        strip.text.x = element_text(size = 10),
-        strip.text.y = element_text(size = 10),
-        axis.text.y = element_blank()) +
-  xlab('Victim Age Group') + 
-  ylab('Crime Type') +
-  ggtitle('Mosaic Plot of Crime Type by Victim Gender, Age and Race')
 
-```
-
-In order to figure out what type of crime that a person in NYC is most likely to encounter, we divided all crime records into 7 types of crimes based on their descriptions: Murder, Assault, Robbery, Sexual Crime, Fraud, Harassment and Others.
-
-According to this mosaic plot, we can find that Robbery and Assault are two most frequent crime types occur in general that a person could encounter in NYC. It also tells us many representative characteristics based on classification of victims. For example, for any race and gender, the older a victim was, the more likely he/she got involved in a robbery or theft, which we can intuitively understand the reason since the older people cannot move fast and thus will tend to be targeted by thieves. Besides, we can see from this plot that elderly people will be more easily deceived, resulting in the higher proportion of fraud incidents than younger age groups. In addition, females under 18 might have higher probability to become victims of Sexual Crime than other groups. White and Aisan / Pacific Islanders race have higher probability to encounter Robbery crimes than other race groups.
 

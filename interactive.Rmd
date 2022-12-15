@@ -1,14 +1,18 @@
 # Interactive component
 
 We created an interactive heat map in order to show where crimes occur the most/least, and what if we choose a crime type. The interactivity will help you explore the viz/data more flexibly and promptly. 
-The link to the visualization is [here](https://yuta555.github.io/).
+The link to the visualization is here. [Go to the interactive website.](https://yuta555.github.io/).
 
 Specifically, the visualization is based on the NYC crime data between 2013 and 2022.
 
 This visualization provides you with interactive experiences in the following way:
+
  - Initially, you will see a heat map for the total number of all types of crime.
+ 
  - If you click one bar on the bar chart by crime type, the heat map on the left will change so that the based data is limited to the crime type you choose, as well as the color changes.　
+ 
  - If you hover the cursor over the map, the corresponding precinct number, the crime type and the number of crime incidents are displayed. 
+ 
  - You can reset the heatmap to the initial state by clicking "Reset" button.
  
 Seeing in detail, Murder, Assault and Sexual crime have the similar pattern of the crime frequency by area that Bronx and the outskirts of Brooklyn and Queens have the high frequency of those types of incidents, while Robbery and Harassment equally occurred almost everywhere. Fraud has a totally different pattern from murder incidents, which we think is because the characteristic of suspects might be different. 
