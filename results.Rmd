@@ -30,7 +30,7 @@ df_ts_22 <- df_ts %>% filter(year_occur == 2022)
 df_occur_count <- as.data.frame(table(df_ts_22$cmplnt_fr_dt))
 df_occur_count$Var1<- as.Date(df_occur_count$Var1)
 colnames(df_occur_count) <- c("Date", "Frequency")
-p_occurence <- ggplot(df_occur_count, mapping = aes(x = Date, y = Frequency)) + geom_path()+ geom_point() + xlab("Date") + ylab("Frequency") + ggtitle("Frequency of Crime in 2022") + scale_x_date(date_breaks = "1 month" , date_labels = "%m/%d")
+p_occurence <- ggplot(df_occur_count, mapping = aes(x = Date, y = Frequency)) + geom_path()+ geom_point() + xlab("Date") + ylab("Frequency") + ggtitle("Frequency of Crimes in 2022") + scale_x_date(date_breaks = "1 month" , date_labels = "%m/%d")
 ggplotly(p_occurence)
 ```
 
@@ -41,25 +41,25 @@ df_ts_22 <- df_ts_22 %>%mutate(hms = as.POSIXct(cmplnt_fr_tm, format = "%H:%M:%O
 df_ts_22 <- df_ts_22 %>%mutate(hour = hour(hms))
 df_occur_hour_count <- as.data.frame(table(df_ts_22$hour))
 colnames(df_occur_hour_count) <- c("Hour", "Frequency")
-p <- ggplot(df_occur_hour_count, mapping = aes(x = Hour, y = Frequency, group=1))+geom_line() +geom_point()+xlab("Hour") + ylab("Frequency") + ggtitle("Frequency of crime at different times of the day in 2022")
+p <- ggplot(df_occur_hour_count, mapping = aes(x = Hour, y = Frequency, group=1))+geom_line() +geom_point()+xlab("Hour") + ylab("Frequency") + ggtitle("Frequency of Crimes at Different Time of a Day in 2022")
 ggplotly(p)
 ```
 
-This plot shows the frequency of crimes at difference times of the day in 2022. The occurrence of crime reaches to its lowest in the morning then gradually goes up. It reaches its peak at 3-5 p.m. then goes down. It's against to our intuition that most crime occurs at night. In fact, most of the crime occurs in the daytime, especially in the afternoon.
+This plot shows the frequency of crimes at difference time of the day in 2022. The occurrence of crime reaches to its lowest in the morning then gradually goes up. It reaches its peak at 3-5 p.m. then goes down. It's against to our intuition that most crime occurs at night. In fact, most of the crimes occur in the daytime, especially in the afternoon.
 
 ### Law Category Analysis
 
-```{r Occurence_law_2022, message=FALSE, fig.width=10}
+```{r Occurence_law_2022, message=FALSE, fig.width=8.2}
 
 df_law_22 <- df_ts_22 %>% group_by(law_cat_cd, cmplnt_fr_dt) %>% summarise(n = n()) %>% ungroup()
 colnames(df_law_22) <- c( "Law Category", "Date", "n")
-p <- ggplot(df_law_22, mapping = aes(x = Date, y = n, group = `Law Category`, color = `Law Category`))  + geom_line() +geom_point()+labs(x = "Date", y = "Frequency", title = "Frequency of Crime in Different Law Categories in 2022", color = "Law Category")+ scale_x_date(date_breaks = "1 month" , date_labels = "%m/%d")
+p <- ggplot(df_law_22, mapping = aes(x = Date, y = n, group = `Law Category`, color = `Law Category`))  + geom_line() +geom_point()+labs(x = "Date", y = "Frequency", title = "Frequency of Crimes in Different Law Categories in 2022", color = "Law Category")+ scale_x_date(date_breaks = "1 month" , date_labels = "%m/%d")
 ggplotly(p)
 ```
 
-The plot shows the frequency of crimes falling in different law categories in 2022. We can see from the plot the frequency in decreasing number is misdemeanor, felony and violation. They all experience an increase and decrease in trend of occurrence in 2022. Moreover, frequency of misdemeanor has the highest variance while the frequency of violation is the most stable among the frequencies of these three kinds of crimes.
+The plot shows the frequency of crimes falling in different law categories in 2022. We can see from the plot the frequency of law categories in decreasing order is misdemeanor, felony, and violation. They all experience an increase and decrease in trend of occurrence in 2022. Moreover, frequency of misdemeanor has the highest variance while the frequency of violation is the most stable among the frequencies of these three law categories.
 
-```{r Occurence_law_hour_2022, message=FALSE, fig.width=10}
+```{r Occurence_law_hour_2022, message=FALSE, fig.width=8.2}
 df_law_22 <- df_ts_22 %>% group_by(law_cat_cd, hour) %>% summarise(n = n())
 df_law_22$hour <- as.factor(df_law_22$hour)
 colnames(df_law_22) <- c("Law Category", "Hour", "n")
@@ -68,9 +68,9 @@ colnames(df_law_22) <- c("Law Category", "Hour", "n")
 ```
 
 
-The above graph shows the frequencies of crimes of all three categories reaches their lowest points at 5-6 a.m.. And they reaches their highest points at 3-5 p.m.. We can also see from the plot that in the night, there is another peak for felony and the rate of felony in all categories of crimes goes up. It's to our intuition that the felony often occur at midnight. 
+The above graph shows the frequencies of crimes of all three law categories reaches their lowest points at 5-6 a.m.. And they reaches their highest points at 3-5 p.m.. We can also see from the plot that in the night, there is another peak for felony and the rate of felony in all categories of crimes goes up. It's to our intuition that the felony often occur at midnight. 
 
-## Analysis for relation between Victim and Crime Type 
+## Analysis for Relation between Victim and Crime Type 
 
 In order to figure out what type of crime that a person in NYC is most likely to encounter, we divided all crime records into 7 types of crimes based on their descriptions: Murder, Assault, Robbery, Sexual Crime, Fraud, Harassment and Others. In this section, we use the crime data in the recent 10 years, that is, between 2013 and 2022.
 ```{r}
@@ -84,7 +84,7 @@ ofns <- df_10y %>% select(ofns_desc_group) %>% group_by(ofns_desc_group) %>% sum
 ggplot(ofns, mapping = aes(x = reorder(ofns_desc_group, n, identity, decreasing = T), y = n)) + geom_bar(stat = 'identity') + labs(x = 'Crime Type', y = 'Frequency', title = "Frequency of Crimes vs. Crime Types")
 ```
 
-From the bar chart we can see that in the past decade, robbery occurred the most. Sexual crime, fraud and murder occurred relatively infrequent.
+From the bar chart we can see that in the past decade, robbery occurred the most. Sexual crime, fraud and murder occurred relatively infrequently.
 
 ```{r victim & suspect corrspond to crime type, fig.height= 10}
 # create mosaic plot of victim attributes and crime type
@@ -119,10 +119,10 @@ colnames(df_boro_22) <- c("Borough", "Date", "n")
  ggplotly(p)
 ```
 
-This plot shows the frequency of crimes everyday happened in different boroughs in 2022. We can see from the plot that in terms of median, crimes happen in Brooklyn most and happen in Staten Island least everyday. There is few outliers in every box, meaning that the number of crimes everyday happen in a borough is stable.
+This plot shows the frequency of crimes everyday happened in different boroughs in 2022. We can see from the plot that in terms of median, crimes happened in Brooklyn the most and happened in Staten Island the least everyday. There are few outliers in every box, meaning that the number of crimes everyday happen in a borough is relatively stable.
 
 
-### Analysis for whole area of NYC
+### Analysis for Whole Area of NYC
 
 To create and discuss geographic visualization, we use the crime data only for the recent 10 years, that is, between 2013 and 2022, because we are interested in the current crime situation in the NYC and the situation might change dramatically if a few decades have passed.
 
@@ -181,7 +181,7 @@ ggmap(columbia) +
         axis.line = element_blank())
 ```
 
-We zoomed in on the map and created a heat map again so that we can find where is dangerous near our campus.
+We zoomed in on the map and created a density map again so that we can find where is dangerous near our campus.
 As a result, more crimes seems to occur in the area more than 3 blocks away from the campus than just around the corner. In particular, we should be careful if we go around the 125th street Amsterdam Avenue and in the east side of Morningside Park.
 
 

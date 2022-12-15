@@ -1,7 +1,7 @@
 # Interactive component
 
 We created an interactive heat map in order to show where crimes occur the most/least, and what if we choose a crime type. The interactivity will help you explore the viz/data more flexibly and promptly. 
-The link to the visualization is here. [Go to the interactive website.](https://yuta555.github.io/).
+The link to the visualization is here. [Go to the interactive website](https://yuta555.github.io/).
 
 Specifically, the visualization is based on the NYC crime data between 2013 and 2022.
 
