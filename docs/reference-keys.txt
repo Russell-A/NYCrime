@@ -11,10 +11,13 @@ results
 time-series-analysis
 frequency-analysis
 law-category-analysis
+analysis-for-relation-between-victim-and-crime-type
 geographic-analysis
 borough-analysis
 analysis-for-whole-area-of-nyc
 analysis-for-the-area-near-columbia-university
-analysis-for-relation-between-victim-and-crime-type
 interactive-component
 conclusion
+exploration
+limitation
+future-directions-and-lessons-learned
