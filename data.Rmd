@@ -82,6 +82,9 @@ knitr::kable(t2)
 
 
 ## Missing value analysis
+
+In the dataset, there are missing values and values marked as Unknown.
+
 ```{r missing value analysis}
 library(dplyr)
 library(stringr)
@@ -108,7 +111,9 @@ na_values_stat <- data.frame(variables, na_nums, unknown_nums)
 
 # show exact number of na values and unknown values in each variable
 kable(na_values_stat)
+```
 
+```{r na plotly, fig.height=10}
 # present graph of na_values_stat
 na_values_fig <- plot_ly(na_values_stat, x = ~na_nums, y = ~variables, type = 'bar',
                          orientation = 'h', marker = list(color = 'cadeblue2'))
@@ -119,6 +124,10 @@ na_values_fig <- na_values_fig %>% layout(
 )
 na_values_fig
 
+```
+
+
+```{r unknown plotly, fig.height=10}
 unknown_values_fig <- plot_ly(na_values_stat, x = ~unknown_nums, y = ~variables, type = 'bar',
                          orientation = 'h', marker = list(color = 'cadeblue2'))
 unknown_values_fig <- unknown_values_fig %>% layout(
@@ -130,27 +139,42 @@ unknown_values_fig
 
 ```
 
+
 Based on two horizontal bar charts above that show the total number of NA values as well as Unknown values in each variable from dataset, we can see several apparent features in missing values:
 
 1. In bar chart of number of NA values, variable **TRANSIT_DISTRICT** and **STATION_NAME** are positively associated because they represent transit district in which the offense occurred and transit police station name respectively. Since each of these two variables has more than 300k NA values, which is more than 92% of total observations in dataset, and we only focus on where did a crime occur, we can drop these two variables in our result analysis part.Similarly, variable **PARKS_NM, HOUSING_PSA, HADEVELOP** have a positive correlation. This means if an observation has NA value in one of these three variables, then there is high probability that such observation will have NA values in other two variables. Since each of these three variables has more than 300k NA values and they are not related to our research questions, we will remove these variables in result analysis part.
 
-2. In bar chart of number of NA values, variable **SUSP_SEX, SUSP_RACE, SUSP_AGE_GROUP** have same number of NA values of 73511, so they are having a positive correlation = 1. This means if an observation has NA value in one of these three variables, then this observation record will have NA values in other two variables. Since we only focus on victims attributes in our research questions, we will remove these three variables in result analysis. Similarly, variable **CMPLNT_TO_TM, CMPLNT_TO_DT** have same number of NA values of 29262. They have a positive correlation = 1. Since we are only focus on occurred date of crimes, we will not select these 2 variables in our result analysis. 
+2. In bar chart of number of NA values, variable **SUSP_SEX, SUSP_RACE, SUSP_AGE_GROUP** have same number of NA values of 73511. Moreover, if an observation has NA value in one of these three variables, then this observation record will have NA values in other two variables. Since we only focus on victims attributes in our research questions, we will remove these three variables in result analysis. Similarly, variable **CMPLNT_TO_TM, CMPLNT_TO_DT** have same number of NA values of 29262. Since we are only focus on occurred date of crimes, we will not include these 2 variables in our result analysis. 
 
 3. In bar chart of number of NA values, there are **ADDR_PCT_CD, BORO_NM, OFNS_DESC, PATROL_BORO, PD_CD, PD_DESC, PREM_TYP_DESC, VIC_RACE, X_COORD_CD, Y_COORD_CD, Geocoded_Column.type** variables having NA values that are less than 1k. We will directly delete observations with NA values in these variables in our result analysis since total number of such observations only occupy approximately 0.5% of all data.
 
 4. In bar chart of number of Unknown values, variable **VIC_RACE** and **VIC_AGE_GROUP** have a strong positive correlation. **VIC_RACE** has 119.927k Unknown values while **VIC_AGE_GROUP** has 111.822k Unknown values, both of them occupy more than 28% of total observations. We will delete observations with Unknown values in making graphs of victim race and victim age group distribution over different areas of NYC. However, since there is a moderate portion of Unknown values in these two variables and we need to show that remaining data is not biased, we will make two tables to show distribution of observations with Unknown values in **VIC_RACE** and **VIC_AGE_GROUP** over boroughs of NYC.
 
-5. In bar chart of number of Unknown values, variable **SUSP_RACE, SUSP_AGE_GROUP** have a strong positive correlation. Since each of these two variables has more than 99k Unknown values and we only focus on victims attributes in our research questions, we will remove these three variables in result analysis.
-
-6. In bar chart of number of Unknown values, variable **PD_DESC** has 1221 Unknown values. Since this just occupy less than 0.5% of total data, we will directly remove observations with Unknown values in **PD_DESC** in our result analysis.
 
 ```{r}
 # table of distribution of unknown values in victim race over boroughs
-table(df$boro_nm, df$vic_race == "UNKNOWN")
+library(scales)
+df_boro_race <- as.data.frame(table(df$boro_nm, df$vic_race == "UNKNOWN"))
+df_boro_race <- df_boro_race %>% group_by(Var1) %>% mutate(prop = Freq/sum(Freq), prop_text = scales::percent(Freq/sum(Freq), 0.01))
+df_boro_race$Var1 <- factor(df_boro_race$Var1, levels=c("QUEENS", "BROOKLYN", "STATEN ISLAND", "BRONX","MANHATTAN"))
+colnames(df_boro_race) <- c("Borough", "UNKNOWN", "Freq", "Proportion", "prop_text")
+ggplot(df_boro_race, mapping = aes(x = Borough, y = Proportion, fill = `UNKNOWN`, label = prop_text))+ geom_bar(stat = 'identity') + coord_flip() +geom_text(size = 3, position = position_stack(vjust = 0.5))+theme(axis.text.x = element_blank()) + labs(x = "Borough" , title = "Percentage of Unknown Values in VIC_RACE in each Borough")
+
 
 # table of distribution of unknown values in victim age group over boroughs
 table(df$boro_nm, df$vic_age_group == "UNKNOWN")
 
+df_boro_age <- as.data.frame(table(df$boro_nm, df$vic_age_group == "UNKNOWN"))
+df_boro_age <- df_boro_age %>% group_by(Var1) %>% mutate(prop = Freq/sum(Freq), prop_text = scales::percent(Freq/sum(Freq), 0.01))
+df_boro_age$Var1 <- factor(df_boro_age$Var1, levels=c("BRONX","QUEENS",  "STATEN ISLAND", "BROOKLYN","MANHATTAN"))
+colnames(df_boro_age) <- c("Borough", "UNKNOWN", "Freq", "Proportion", "prop_text")
+ggplot(df_boro_age, mapping = aes(x = Borough, y = Proportion, fill = `UNKNOWN`, label = prop_text))+ geom_bar(stat = 'identity') + coord_flip() +geom_text(size = 3, position = position_stack(vjust = 0.5))+theme(axis.text.x = element_blank()) + labs(x = "Borough" , title = "Percentage of Unknown Values in VIC_AGE_GROUP in each Borough")
+
 ```
 
-According to these two tables, we can see that Manhattan borough has the most Unknown values while Staten Island borough has the least Unknown values in variable **VIC_RACE** and **VIC_AGE_GROUP**. Unknown values approximately have uniform distribution in other three variables. Therefore, the removal of all observations with Unknown values in **VIC_RACE** and **VIC_AGE_GROUP** will reduce the density of each type of victim race and victim age group in Manhattan and increase the density of them in Staten Island. This limitation will slightly reduce the overall accuracy of our graph.
+According to these two plots, we can see that Manhattan borough has the highest percentage of Unknown values in variable **VIC_RACE** and **VIC_AGE_GROUP**. Unknown values approximately have uniform distribution in other four variables. Therefore, the removal of all observations with Unknown values in **VIC_RACE** and **VIC_AGE_GROUP** will reduce the density of each type of victim race and victim age group in Manhattan. This limitation will slightly reduce the overall accuracy of our graph.
+
+
+5. In bar chart of number of Unknown values, variable **SUSP_RACE, SUSP_AGE_GROUP** have a strong positive correlation. Since each of these two variables has more than 99k Unknown values and we only focus on victims attributes in our research questions, we will remove these two variables in result analysis.
+
+6. In bar chart of number of Unknown values, variable **PD_DESC** has 1221 Unknown values. Since this just occupy less than 0.5% of total data, we will directly remove observations with Unknown values in **PD_DESC** in our result analysis.
