@@ -113,6 +113,16 @@ na_values_stat <- data.frame(variables, na_nums, unknown_nums)
 kable(na_values_stat)
 ```
 
+```{r redav, fig.width = 15, fig.height = 20}
+library(redav)
+
+df_miss_ana = df %>% select(cmplnt_num, addr_pct_cd, boro_nm, cmplnt_fr_dt, cmplnt_fr_tm, law_cat_cd, ofns_desc, susp_age_group, susp_race, susp_sex, vic_age_group, vic_race, vic_sex, x_coord_cd, y_coord_cd)
+
+df_miss_ana <- df_miss_ana %>% mutate_all(funs(str_replace(., "UNKNOWN", "NA")))
+df_miss_ana[df_miss_ana == "NA"] <- NA
+plot_missing(df_miss_ana)
+```
+
 ```{r na plotly, fig.height=10}
 # present graph of na_values_stat
 na_values_fig <- plot_ly(na_values_stat, x = ~na_nums, y = ~variables, type = 'bar',
