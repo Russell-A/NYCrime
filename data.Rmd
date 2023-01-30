@@ -121,7 +121,18 @@ df_miss_ana = df %>% select(cmplnt_num, addr_pct_cd, boro_nm, cmplnt_fr_dt, cmpl
 df_miss_ana <- df_miss_ana %>% mutate_all(funs(str_replace(., "UNKNOWN", "NA")))
 df_miss_ana[df_miss_ana == "NA"] <- NA
 plot_missing(df_miss_ana)
+
+#library(mi)
+#mi_data <- df_miss_ana[sample(1:nrow(df_miss_ana), 100), 2:13 ]
+#mi_data <- mi(mi_data, n.iter = 10, n.chains = 2, seed = 2000)
+#hist(mi_data, y="susp_age_group")
+
+
+
 ```
+After Data Cleaning and Transformation, we can analyze the missing value.  The bar chart gives out the percentage of missing data in every significant variable. We can see from the bar chart that information about suspects and victims is often missing. For example, more than 50% of the suspects’ age are missing. This is probably because the suspects are uncaught or the suspects and the victims do not disclose their personal information. Although some data are missing in other variables, they don't account for much.
+The heat plot give out the missing patterns in the dataset and their percentage in the whole dataset. We can see that more than 25% of the rows are complete cases. And the age, race, and sex of the suspects are often missing together. The victims’ race and age are also always missing together. 
+
 
 ```{r na plotly, fig.height=10}
 # present graph of na_values_stat
